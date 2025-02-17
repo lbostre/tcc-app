@@ -1,33 +1,131 @@
-import { Image, StyleSheet, Platform, View } from "react-native";
-
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Map from "../../components/Map";
+import { SearchFilter } from '@/components/SearchFilter';
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { firestore } from '@/firebaseConfig';
+import {  Resource, ResourceMarker } from '@/utils/types';
+import { getCoordinates } from '@/utils/geolocation';
+import { SearchResult } from '@/components/SearchResult';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function HomeScreen() {
+    const [text, setText] = useState("");
+    const [filter, setFilter] = useState("");
+    const [resourceMarkers, setResourceMarkers] = useState<ResourceMarker[]>([]);
+    const [selectedResourceMarker, setSelectedResourceMarker] = useState<ResourceMarker | null>();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
+
+    const fetchData = async () => {
+        setLoading(true); // Start loading
+        try {
+            const resourcesRef = collection(firestore, "resources");
+            const resourcesSnapshot = await getDocs(resourcesRef);
+
+            const fetchedResources: Resource[] = resourcesSnapshot.docs.map(
+                (doc) => ({ id: doc.id, ...doc.data() } as Resource)
+            );
+
+            const markerPromises = fetchedResources.map(async (resource) => {
+                try {
+                    const formattedAddress = resource.address.includes(",")
+                        ? resource.address
+                        : `${resource.address}, USA`;
+
+                    const coords = await getCoordinates(formattedAddress);
+                    if (coords) {
+                        return {
+                            resource,
+                            marker: {
+                                latlng: coords,
+                                title: resource.name,
+                                type: resource.type
+                            }
+                        };
+                    }
+                } catch (error) {
+                    console.warn(`Geocoding failed for: ${resource.address}`);
+                }
+                return null;
+            });
+
+            const resolvedResourceMarkers = (await Promise.all(markerPromises)).filter(Boolean) as ResourceMarker[];
+            setResourceMarkers(resolvedResourceMarkers);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false); // End loading
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const filteredResourceMarkers = resourceMarkers.filter(
+        (resourceMarker) =>
+            resourceMarker.resource.name.toLowerCase().includes(text.toLowerCase()) &&
+            (resourceMarker.resource.type === filter || filter === "")
+    );
+
     return (
-        <ParallaxScrollView
-            headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-            headerImage={
-                <Image
-                    source={require("@/assets/images/partial-react-logo.png")}
-                    style={styles.reactLogo}
-                />
-            }
-        >
-            <ThemedView style={styles.titleContainer}>
-                <ThemedText type="title">Map</ThemedText>
-                <View style={styles.mapContainer}>
-                    <Map />
+            <ThemedView style={styles.container}>
+                <View style={styles.topContainer}>
+                    <View style={styles.headerContainer}><
+                        ThemedText type="title">Map</ThemedText>
+                        {isFocused && <TouchableOpacity onPress={() => setIsFocused(false)}>
+                            <AntDesign name="closecircleo" size={24} color="white"/>
+                        </TouchableOpacity>}
+                    </View>
+                    <SearchFilter text={text} setText={setText } setFilter={setFilter} setIsFocused={setIsFocused}/>
                 </View>
+                {isFocused ? <ScrollView style={styles.resultsContainer}>
+                    {filteredResourceMarkers.length > 0 ? (filteredResourceMarkers.map((res) => {
+                        return <SearchResult key={res.resource.name} text={res.resource.name} type={res.resource.type} onPress={() => {
+                            setSelectedResourceMarker(res)
+                            setTimeout(() => {
+                                setIsFocused(false);
+                            }, 300);
+                        }}/>
+                    })) : <ThemedText>No resources found</ThemedText>}
+                </ScrollView> :
+                <View style={styles.mapContainer}>
+                    {loading ? <ThemedText >Loading...</ThemedText>: <Map resourceMarkers={resourceMarkers}
+                                                                          selectedResourceMarker={selectedResourceMarker}
+                                                                          setSelectedResourceMarker={setSelectedResourceMarker} isFocused={isFocused}/>}
+                </View>
+                }
             </ThemedView>
-        </ParallaxScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flexDirection: "column",
+        flex: 1,
+        paddingVertical: 56,
+        overflow: "hidden",
+    },
+    topContainer: {
+        flexDirection: "column",
+        paddingHorizontal: 32,
+        paddingTop: 32,
+        gap: 14,
+        paddingBottom: 10,
+    },
+    headerContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    resultsContainer: {
+        paddingHorizontal: 32,
+        flexDirection: "column",
+        gap: 8,
+    },
     titleContainer: {
         flexDirection: "column",
         alignItems: "center",
@@ -46,7 +144,7 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
         width: "100%",
-        height: 300,
+        height: 550,
     },
 });
 

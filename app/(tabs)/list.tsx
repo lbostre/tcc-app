@@ -2,8 +2,6 @@ import {
     StyleSheet,
     View,
     ScrollView,
-    TextInput,
-    TouchableOpacity,
 } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
@@ -12,27 +10,13 @@ import { ResourceCard } from "@/components/ResourceCard";
 import { useEffect, useState } from "react";
 import { firestore } from "@/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import { Filter } from "@/components/Filter";
-import { useNavigation, useRouter } from "expo-router";
-
-type Resource = {
-    id: string;
-    name: string;
-    type: string;
-    address: string;
-    email: string;
-    phone: string;
-    website: string;
-    overview: string;
-    services: string;
-    openTimes: string[];
-};
+import { SearchFilter } from '@/components/SearchFilter';
+import { Resource } from '@/utils/types';
 
 export default function TabTwoScreen() {
-    const [text, onChangeText] = useState("");
+    const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
     const [resources, setResources] = useState<Resource[]>([]);
-    const router = useRouter();
 
     const fetchData = async () => {
         const resourcesRef = collection(firestore, "resources");
@@ -46,7 +30,6 @@ export default function TabTwoScreen() {
 
     useEffect(() => {
         fetchData();
-        console.log(resources[0]);
     }, []);
 
     const filteredResources = resources.filter(
@@ -64,29 +47,11 @@ export default function TabTwoScreen() {
                     the filters below.
                 </ThemedText>
             </View>
-            <TextInput
-                style={styles.input}
-                onChangeText={onChangeText}
-                value={text}
-                placeholder="Search for resources..."
-            />
-            <Filter setFilter={setFilter} />
+            <SearchFilter text={text} setText={setText } setFilter={setFilter}/>
             <ScrollView style={styles.scrollContainer}>
                 {filteredResources.length > 0 ? (
                     filteredResources.map((resource) => (
-                        <TouchableOpacity
-                            onPress={() =>
-                                router.push({
-                                    pathname: "/resource",
-                                    params: {
-                                        resource: JSON.stringify(resource),
-                                    },
-                                })
-                            }
-                            key={resource.id}
-                        >
-                            <ResourceCard resource={resource} />
-                        </TouchableOpacity>
+                            <ResourceCard resource={resource} key={resource.id}/>
                     ))
                 ) : (
                     <ThemedText>No resources found</ThemedText>

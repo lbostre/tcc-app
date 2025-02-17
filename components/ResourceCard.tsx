@@ -1,9 +1,10 @@
-import { Image, StyleSheet, Platform, View, Text } from "react-native";
+import { Image, StyleSheet, Platform, View, Text, TouchableOpacity } from "react-native";
 import { ThemedText } from "./ThemedText";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { OpenClosedText } from "./OpenClosedText";
+import { useRouter } from 'expo-router';
 
 type ResourceCardProps = {
     resource: {
@@ -22,6 +23,7 @@ type ResourceCardProps = {
 
 export function ResourceCard({ resource }: ResourceCardProps) {
     const { name, type, openTimes } = resource;
+    const router = useRouter();
     function getIcon() {
         if (type === "Food Pantry") {
             return (
@@ -53,6 +55,17 @@ export function ResourceCard({ resource }: ResourceCardProps) {
     }
 
     return (
+        <TouchableOpacity
+            onPress={() =>
+                router.push({
+                    pathname: "/resource",
+                    params: {
+                        resource: JSON.stringify(resource),
+                    },
+                })
+            }
+            style={styles.touchableOpacity}
+        >
         <View style={styles.container}>
             <View>{getIcon()}</View>
             <View style={styles.containerMiddle}>
@@ -66,10 +79,14 @@ export function ResourceCard({ resource }: ResourceCardProps) {
                 <Entypo name="chevron-right" size={32} color="black" />
             </View>
         </View>
+        </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
+    touchableOpacity: {
+        width: "100%",
+    },
     container: {
         flexDirection: "row",
         padding: 14,
