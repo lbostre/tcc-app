@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, useColorScheme } from 'react-native';
 import { Filter } from '@/components/Filter';
 
 type SearchFilterProps = {
@@ -9,6 +9,7 @@ type SearchFilterProps = {
 }
 
 export function SearchFilter({text, setText, setFilter, setIsFocused}: SearchFilterProps) {
+    const colorScheme = useColorScheme();
     return (
         <>
             <TextInput
@@ -16,6 +17,7 @@ export function SearchFilter({text, setText, setFilter, setIsFocused}: SearchFil
                 onChangeText={setText}
                 value={text}
                 placeholder="Search for resources..."
+                placeholderTextColor="gray"
                 onFocus={() => setIsFocused && setIsFocused(true)}
             />
             <Filter setFilter={setFilter} />
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
     input: {
         height: 40,
         padding: 12,
-        backgroundColor: "#fff",
+        backgroundColor: "#f7f7f7",
         borderRadius: 5,
         color: "#000",
     },

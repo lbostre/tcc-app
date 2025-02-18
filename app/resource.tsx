@@ -14,6 +14,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
+import { ResourceIcon } from '@/components/ResourceIcon';
 
 type Resource = {
     id: string;
@@ -56,36 +57,6 @@ export default function ResourceScreen() {
         "Sunday",
     ];
 
-    function getIcon() {
-        if (type === "Food Pantry") {
-            return (
-                <View
-                    style={{
-                        ...styles.iconContainer,
-                        backgroundColor: "green",
-                    }}
-                >
-                    <MaterialCommunityIcons
-                        name="silverware-fork-knife"
-                        size={44}
-                        color="white"
-                    />
-                </View>
-            );
-        } else if (type === "Shelter") {
-            return (
-                <View
-                    style={{
-                        ...styles.iconContainer,
-                        backgroundColor: "orange",
-                    }}
-                >
-                    <FontAwesome6 name="house" size={42} color="white" />
-                </View>
-            );
-        }
-    }
-
     function openDefaultMapsApp(address: string) {
         const encodedAddress = encodeURIComponent(address);
         let url = "";
@@ -124,7 +95,7 @@ export default function ResourceScreen() {
             <Stack.Screen options={{ title: name }} />
             <ScrollView>
                 <ThemedView style={styles.container}>
-                    {getIcon()}
+                    <ResourceIcon type={type} size="lg"/>
                     <ThemedText type="title" style={{ textAlign: "center" }}>
                         {name}
                     </ThemedText>
@@ -290,7 +261,7 @@ const styles = StyleSheet.create({
     },
     infoRowContainer: {
         flexDirection: "row",
-        backgroundColor: "#fff",
+        backgroundColor: "#f7f7f7",
         width: "100%",
         padding: 14,
         borderRadius: 5,
@@ -321,7 +292,7 @@ const styles = StyleSheet.create({
     },
     hoursRowContainer: {
         flexDirection: "row",
-        backgroundColor: "#fff",
+        backgroundColor: "#f7f7f7",
         width: "100%",
         padding: 14,
         borderRadius: 5,
@@ -341,7 +312,7 @@ const styles = StyleSheet.create({
     aboutRowContainer: {
         padding: 14,
         flexDirection: "column",
-        backgroundColor: "#fff",
+        backgroundColor: "#f7f7f7",
         width: "100%",
         borderRadius: 5,
         gap: 2,

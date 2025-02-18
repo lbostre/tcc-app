@@ -5,6 +5,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { OpenClosedText } from "./OpenClosedText";
 import { useRouter } from 'expo-router';
+import { ResourceIcon } from '@/components/ResourceIcon';
 
 type ResourceCardProps = {
     resource: {
@@ -24,35 +25,6 @@ type ResourceCardProps = {
 export function ResourceCard({ resource }: ResourceCardProps) {
     const { name, type, openTimes } = resource;
     const router = useRouter();
-    function getIcon() {
-        if (type === "Food Pantry") {
-            return (
-                <View
-                    style={{
-                        ...styles.iconContainer,
-                        backgroundColor: "green",
-                    }}
-                >
-                    <MaterialCommunityIcons
-                        name="silverware-fork-knife"
-                        size={16}
-                        color="white"
-                    />
-                </View>
-            );
-        } else if (type === "Shelter") {
-            return (
-                <View
-                    style={{
-                        ...styles.iconContainer,
-                        backgroundColor: "orange",
-                    }}
-                >
-                    <FontAwesome6 name="house" size={14} color="white" />
-                </View>
-            );
-        }
-    }
 
     return (
         <TouchableOpacity
@@ -67,7 +39,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
             style={styles.touchableOpacity}
         >
         <View style={styles.container}>
-            <View>{getIcon()}</View>
+            <View><ResourceIcon type={type}/></View>
             <View style={styles.containerMiddle}>
                 <ThemedText darkColor="#000" type="subtitle">
                     {name}
@@ -90,20 +62,18 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         padding: 14,
-        backgroundColor: "#fff",
+        backgroundColor: "#f7f7f7",
         borderRadius: 5,
         gap: 8,
         marginBottom: 8,
     },
     containerMiddle: {
         flexDirection: "column",
-        backgroundColor: "#fff",
         gap: 1,
         maxWidth: "70%",
     },
     containerRight: {
         flexDirection: "column",
-        backgroundColor: "#fff",
         gap: 2,
         alignItems: "center",
         alignSelf: "center",

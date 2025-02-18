@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Keyboard, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Map from "../../components/Map";
@@ -76,7 +76,10 @@ export default function HomeScreen() {
                 <View style={styles.topContainer}>
                     <View style={styles.headerContainer}><
                         ThemedText type="title">Map</ThemedText>
-                        {isFocused && <TouchableOpacity onPress={() => setIsFocused(false)}>
+                        {isFocused && <TouchableOpacity onPress={() => {
+                            setIsFocused(false)
+                            Keyboard.dismiss()
+                        }}>
                             <AntDesign name="closecircleo" size={24} color="white"/>
                         </TouchableOpacity>}
                     </View>
