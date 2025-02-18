@@ -9,28 +9,28 @@ import { ThemedView } from "@/components/ThemedView";
 import { ResourceCard } from "@/components/ResourceCard";
 import { useEffect, useState } from "react";
 import { firestore } from "@/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { SearchFilter } from '@/components/SearchFilter';
 import { Resource } from '@/utils/types';
 
 export default function TabTwoScreen() {
+
     const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
     const [resources, setResources] = useState<Resource[]>([]);
 
-    const fetchData = async () => {
-        const resourcesRef = collection(firestore, "resources");
-        const resourcesSnapshot = await getDocs(resourcesRef);
-        setResources(
-            resourcesSnapshot.docs.map(
-                (doc) => ({ id: doc.id, ...doc.data() } as Resource)
-            )
-        );
-    };
-
     useEffect(() => {
-        fetchData();
-    }, []);
+        const resourcesRef = collection(firestore, "resources");
+
+        const q = filter ? query(resourcesRef, where("type", "==", filter)) : resourcesRef;
+
+        const unsubscribe = onSnapshot(q, (snapshot: { docs: any[]; }) => {
+            setResources(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Resource)));
+        });
+
+        // Cleanup subscription on unmount
+        return () => unsubscribe();
+    }, [filter]);
 
     const filteredResources = resources.filter(
         (resource) =>

@@ -9,7 +9,6 @@ type SearchFilterProps = {
 }
 
 export function SearchFilter({text, setText, setFilter, setIsFocused}: SearchFilterProps) {
-    const colorScheme = useColorScheme();
     return (
         <>
             <TextInput

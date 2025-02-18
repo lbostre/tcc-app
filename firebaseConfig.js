@@ -9,6 +9,9 @@ import {
     where,
     doc,
     getDoc,
+    persistentLocalCache,
+    persistentMultipleTabManager,
+    initializeFirestore
 } from "firebase/firestore";
 
 // Optionally import the services that you want to use
@@ -29,7 +32,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
+const firestore = initializeFirestore(app,
+    {localCache:
+            persistentLocalCache({tabManager: persistentMultipleTabManager()})
+    });
+
 
 export {
     firestore,
