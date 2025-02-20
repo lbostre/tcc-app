@@ -47,11 +47,11 @@ export default function TabTwoScreen() {
                     the filters below.
                 </ThemedText>
             </View>
-            <SearchFilter text={text} setText={setText } setFilter={setFilter}/>
+            <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter}/>
             <ScrollView style={styles.scrollContainer}>
                 {filteredResources.length > 0 ? (
                     filteredResources.map((resource) => (
-                            <ResourceCard resource={resource} key={resource.id}/>
+                            <ResourceCard resource={resource} key={resource.id} showMapButton={true}/>
                     ))
                 ) : (
                     <ThemedText>No resources found</ThemedText>

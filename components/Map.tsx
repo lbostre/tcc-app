@@ -6,6 +6,7 @@ import { ResourceCard } from '@/components/ResourceCard';
 import { ThemedText } from '@/components/ThemedText';
 import * as Location from "expo-location";
 import { ResourceIcon } from '@/components/ResourceIcon';
+import { useLocalSearchParams } from 'expo-router';
 
 
 type MapProps = {
@@ -94,7 +95,7 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                             ]
                         }}
                     >
-                        <ResourceIcon type={resMarker.resource.type}/>
+                        <ResourceIcon type={resMarker.resource.type} outline={true}/>
                     </Marker>
                 ))}
             </MapView>

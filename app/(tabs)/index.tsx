@@ -10,8 +10,10 @@ import {  Resource, ResourceMarker } from '@/utils/types';
 import { getCoordinates } from '@/utils/geolocation';
 import { SearchResult } from '@/components/SearchResult';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function HomeScreen() {
+    const { name } = useLocalSearchParams();
     const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
     const [resourceMarkers, setResourceMarkers] = useState<ResourceMarker[]>([]);
@@ -63,7 +65,13 @@ export default function HomeScreen() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+        if(name) {
+            const marker = resourceMarkers.find(marker => marker.resource.name === name);
+            if(marker) {
+                setSelectedResourceMarker(marker)
+            }
+        }
+    }, [name]);
 
     const filteredResourceMarkers = resourceMarkers.filter(
         (resourceMarker) =>

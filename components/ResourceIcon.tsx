@@ -4,16 +4,19 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 type ResourceIconProps = {
     type: string,
-    size?: "sm" | "lg"
+    size?: "sm" | "lg",
+    outline? :boolean,
 }
 
-export function ResourceIcon({type, size = "sm"}: ResourceIconProps) {
+export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconProps) {
     if (type === "Food Pantry") {
         return (
             <View
                 style={{
                     ...(size === "sm" ? styles.iconContainer : styles.iconContainerLarge),
                     backgroundColor: "green",
+                    borderColor: "white",
+                    borderWidth: outline ? 2 : 0,
                 }}
             >
                 <MaterialCommunityIcons
@@ -29,6 +32,8 @@ export function ResourceIcon({type, size = "sm"}: ResourceIconProps) {
                 style={{
                     ...(size === "sm" ? styles.iconContainer : styles.iconContainerLarge),
                     backgroundColor: "orange",
+                    borderColor: "white",
+                    borderWidth: outline ? 2 : 0,
                 }}
             >
                 <FontAwesome6 name="house" size={size === "sm" ?16: 42} color="white" />

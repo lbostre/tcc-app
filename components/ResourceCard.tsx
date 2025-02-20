@@ -6,6 +6,8 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { OpenClosedText } from "./OpenClosedText";
 import { useRouter } from 'expo-router';
 import { ResourceIcon } from '@/components/ResourceIcon';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import React from 'react';
 
 type ResourceCardProps = {
     resource: {
@@ -20,9 +22,10 @@ type ResourceCardProps = {
         services: string;
         openTimes: string[];
     };
+    showMapButton?: boolean;
 };
 
-export function ResourceCard({ resource }: ResourceCardProps) {
+export function ResourceCard({ resource, showMapButton = false }: ResourceCardProps) {
     const { name, type, openTimes } = resource;
     const router = useRouter();
 
@@ -47,7 +50,15 @@ export function ResourceCard({ resource }: ResourceCardProps) {
                 <Text style={styles.subheadingText}>{type}</Text>
                 <OpenClosedText hours={openTimes} />
             </View>
-            <View style={styles.containerRight}>
+            <View style={{ ...styles.containerRight, height: showMapButton ? "100%" : "auto" }}>
+                {showMapButton && <TouchableOpacity style={styles.mapIconContainer} onPress={() => router.push({
+                    pathname: "/(tabs)",
+                    params: {
+                        name: resource.name,
+                    },
+                })}>
+                    <IconSymbol size={22} name="map.fill" color="black"/>
+                </TouchableOpacity>}
                 <Entypo name="chevron-right" size={32} color="black" />
             </View>
         </View>
@@ -58,6 +69,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
 const styles = StyleSheet.create({
     touchableOpacity: {
         width: "100%",
+        maxHeight: 130,
     },
     container: {
         flexDirection: "row",
@@ -74,10 +86,11 @@ const styles = StyleSheet.create({
     },
     containerRight: {
         flexDirection: "column",
-        gap: 2,
         alignItems: "center",
         alignSelf: "center",
         marginLeft: "auto",
+        justifyContent: "space-between",
+        height: "100%",
     },
     iconContainer: {
         borderRadius: 50,
@@ -91,4 +104,9 @@ const styles = StyleSheet.create({
         color: "#555",
         marginBottom: 6,
     },
+    mapIconContainer: {
+        backgroundColor: "lightgray",
+        padding: 5,
+        borderRadius: 5,
+    }
 });
