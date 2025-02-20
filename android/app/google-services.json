@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1018509370599",
+    "project_id": "lthc-web",
+    "storage_bucket": "lthc-web.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018509370599:android:c7c1b14235ac3e3ebc6e42",
+        "android_client_info": {
+          "package_name": "com.lthc.tccapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018509370599-hr691cknkc0vuk9h7poook9hhcjv7s3e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8UGHfWU_3FsxOz93k4qV-izcMMAgtSB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018509370599-hr691cknkc0vuk9h7poook9hhcjv7s3e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
