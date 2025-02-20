@@ -88,7 +88,7 @@ export default function HomeScreen() {
                             setIsFocused(false)
                             Keyboard.dismiss()
                         }}>
-                            <AntDesign name="closecircleo" size={24} color="white"/>
+                            <AntDesign name="closecircleo" size={24} color="black"/>
                         </TouchableOpacity>}
                     </View>
                     <SearchFilter text={text} setText={setText} setFilter={setFilter} setIsFocused={setIsFocused}
