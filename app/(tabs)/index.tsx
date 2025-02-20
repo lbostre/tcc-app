@@ -83,7 +83,8 @@ export default function HomeScreen() {
                             <AntDesign name="closecircleo" size={24} color="white"/>
                         </TouchableOpacity>}
                     </View>
-                    <SearchFilter text={text} setText={setText } setFilter={setFilter} setIsFocused={setIsFocused}/>
+                    <SearchFilter text={text} setText={setText} setFilter={setFilter} setIsFocused={setIsFocused}
+                                  filter={filter}/>
                 </View>
                 {isFocused ? <ScrollView style={styles.resultsContainer}>
                     {filteredResourceMarkers.length > 0 ? (filteredResourceMarkers.map((res) => {

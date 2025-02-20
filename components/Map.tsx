@@ -5,6 +5,7 @@ import { Resource, ResourceMarker } from '@/utils/types';
 import { ResourceCard } from '@/components/ResourceCard';
 import { ThemedText } from '@/components/ThemedText';
 import * as Location from "expo-location";
+import { ResourceIcon } from '@/components/ResourceIcon';
 
 
 type MapProps = {
@@ -92,8 +93,9 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                                 { scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 2 : 1 }
                             ]
                         }}
-                        // image={require("../assets/images/house.png")}
-                    />
+                    >
+                        <ResourceIcon type={resMarker.resource.type}/>
+                    </Marker>
                 ))}
             </MapView>
             <View style={styles.cardContainer}>

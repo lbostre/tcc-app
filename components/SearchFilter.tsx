@@ -4,11 +4,12 @@ import { Filter } from '@/components/Filter';
 type SearchFilterProps = {
     text: string;
     setText: (text: string) => void;
+    filter: string;
     setFilter: (text: string) => void;
     setIsFocused?: (isFocused: boolean) => void;
 }
 
-export function SearchFilter({text, setText, setFilter, setIsFocused}: SearchFilterProps) {
+export function SearchFilter({text, setText, filter, setFilter, setIsFocused}: SearchFilterProps) {
     return (
         <>
             <TextInput
@@ -19,7 +20,7 @@ export function SearchFilter({text, setText, setFilter, setIsFocused}: SearchFil
                 placeholderTextColor="gray"
                 onFocus={() => setIsFocused && setIsFocused(true)}
             />
-            <Filter setFilter={setFilter} />
+            <Filter setFilter={setFilter} filter={filter} />
         </>
     )
 }

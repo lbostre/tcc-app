@@ -9,18 +9,21 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 type FilterProps = {
+    filter: string;
     setFilter: (filter: string) => void;
 };
 
-export function Filter({ setFilter }: FilterProps) {
+export function Filter({ filter, setFilter }: FilterProps) {
     return (
         <View style={styles.container}>
             <TouchableOpacity
                 style={{
                     ...styles.iconContainer,
                     backgroundColor: "green",
+                    borderWidth: filter === "Food Pantry" ? 3 : 0,
+                    borderColor: "darkgreen",
                 }}
-                onPress={() => setFilter("Food Pantry")}
+                onPress={() => filter === "Food Pantry" ? setFilter("") : setFilter("Food Pantry")}
             >
                 <MaterialCommunityIcons
                     name="silverware-fork-knife"
@@ -33,8 +36,10 @@ export function Filter({ setFilter }: FilterProps) {
                 style={{
                     ...styles.iconContainer,
                     backgroundColor: "orange",
+                    borderWidth: filter === "Shelter" ? 3 : 0,
+                    borderColor: "darkorange",
                 }}
-                onPress={() => setFilter("Shelter")}
+                onPress={() => filter === "Shelter" ? setFilter("") : setFilter("Shelter")}
             >
                 <FontAwesome6 name="house" size={14} color="white" />
                 <Text style={styles.filterText}>Shelter</Text>
@@ -42,9 +47,11 @@ export function Filter({ setFilter }: FilterProps) {
             <TouchableOpacity
                 style={{
                     ...styles.iconContainer,
+                    borderWidth: filter === "Other" ? 3 : 0,
                     backgroundColor: "gray",
+                    borderColor: "darkgray",
                 }}
-                onPress={() => setFilter("")}
+                onPress={() => filter === "Other" ? setFilter("") : setFilter("Other")}
             >
                 <Text style={styles.filterText}>Other</Text>
             </TouchableOpacity>
