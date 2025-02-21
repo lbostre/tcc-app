@@ -20,7 +20,7 @@ export default function TabTwoScreen() {
     const [resources, setResources] = useState<Resource[]>([]);
 
     useEffect(() => {
-        const resourcesCollection = firestore().collection("Resources");
+        const resourcesCollection = firestore().collection("resources");
 
         // Apply filter if set
         const queryRef = filter
