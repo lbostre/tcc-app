@@ -9,7 +9,6 @@ import { ThemedView } from "@/components/ThemedView";
 import { ResourceCard } from "@/components/ResourceCard";
 import { useEffect, useState } from "react";
 import firestore from '@react-native-firebase/firestore';
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
 import { SearchFilter } from '@/components/SearchFilter';
 import { Resource } from '@/utils/types';
 
