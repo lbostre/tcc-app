@@ -84,7 +84,7 @@ export default function HomeScreen() {
                         </TouchableOpacity>}
                     </View>
                     <SearchFilter text={text} setText={setText} setFilter={setFilter} setIsFocused={setIsFocused}
-                                  filter={filter}/>
+                                  filter={filter} previousPath={"/"}/>
                 </View>
                 {isFocused ? <ScrollView style={styles.resultsContainer}>
                     {filteredResourceMarkers.length > 0 ? (filteredResourceMarkers.map((res) => {

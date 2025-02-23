@@ -11,13 +11,14 @@ import { useEffect, useState } from "react";
 import firestore from '@react-native-firebase/firestore';
 import { SearchFilter } from '@/components/SearchFilter';
 import { Resource } from '@/utils/types';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function TabTwoScreen() {
-
+    const {day, time} = useLocalSearchParams();
     const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
     const [resources, setResources] = useState<Resource[]>([]);
-
+    console.log(day, time)
     useEffect(() => {
         const resourcesCollection = firestore().collection("resources");
 
@@ -53,7 +54,7 @@ export default function TabTwoScreen() {
                     the filters below.
                 </ThemedText>
             </View>
-            <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter}/>
+            <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter} previousPath={"/list"}/>
             <ScrollView style={styles.scrollContainer}>
                 {filteredResources.length > 0 ? (
                     filteredResources.map((resource) => (
