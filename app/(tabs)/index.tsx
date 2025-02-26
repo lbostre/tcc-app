@@ -94,6 +94,11 @@ export default function HomeScreen() {
             (resourceMarker.resource.type === filter || filter === "")
     );
 
+    const filteredMapResourceMarkers = resourceMarkers.filter(
+        (resourceMarker) =>
+            (resourceMarker.resource.type === filter || filter === "")
+    );
+
     return (
         <ThemedView style={styles.container}>
             <View style={styles.topContainer}>
@@ -151,7 +156,7 @@ export default function HomeScreen() {
                         <ThemedText>Loading...</ThemedText>
                     ) : (
                         <Map
-                            resourceMarkers={resourceMarkers}
+                            resourceMarkers={filteredMapResourceMarkers}
                             selectedResourceMarker={selectedResourceMarker}
                             setSelectedResourceMarker={
                                 setSelectedResourceMarker
