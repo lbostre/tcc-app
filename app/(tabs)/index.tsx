@@ -4,8 +4,6 @@ import { ThemedView } from "@/components/ThemedView";
 import Map from "../../components/Map";
 import { SearchFilter } from '@/components/SearchFilter';
 import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '@/firebaseConfig';
 import {  Resource, ResourceMarker } from '@/utils/types';
 import { getCoordinates } from '@/utils/geolocation';
 import { SearchResult } from '@/components/SearchResult';
@@ -24,11 +22,11 @@ export default function HomeScreen() {
     const fetchData = async () => {
         setLoading(true); // Start loading
         try {
-            const resourcesRef = collection(firestore, "resources");
-            const resourcesSnapshot = await getDocs(resourcesRef);
+            const resourcesRef = firestore().collection("resources");
+            const resourcesSnapshot = await resourcesRef.get();
 
             const fetchedResources: Resource[] = resourcesSnapshot.docs.map(
-                (doc) => ({ id: doc.id, ...doc.data() } as Resource)
+                (doc) => ({ id: doc.id, ...doc.data() }) as Resource
             );
 
             const markerPromises = fetchedResources.map(async (resource) => {
@@ -63,6 +61,7 @@ export default function HomeScreen() {
         }
     };
 
+
     useEffect(() => {
         fetchData();
         if(name) {
@@ -92,7 +91,7 @@ export default function HomeScreen() {
                         </TouchableOpacity>}
                     </View>
                     <SearchFilter text={text} setText={setText} setFilter={setFilter} setIsFocused={setIsFocused}
-                                  filter={filter}/>
+                                  filter={filter} previousPath={"/"}/>
                 </View>
                 {isFocused ? <ScrollView style={styles.resultsContainer}>
                     {filteredResourceMarkers.length > 0 ? (filteredResourceMarkers.map((res) => {

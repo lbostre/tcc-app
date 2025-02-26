@@ -8,29 +8,36 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { ResourceCard } from "@/components/ResourceCard";
 import { useEffect, useState } from "react";
-import { firestore } from "@/firebaseConfig";
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import firestore from '@react-native-firebase/firestore';
 import { SearchFilter } from '@/components/SearchFilter';
 import { Resource } from '@/utils/types';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function TabTwoScreen() {
-
+    const {day, time} = useLocalSearchParams();
     const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
     const [resources, setResources] = useState<Resource[]>([]);
-
+    console.log(day, time)
     useEffect(() => {
-        const resourcesRef = collection(firestore, "resources");
+        const resourcesCollection = firestore().collection("resources");
 
-        const q = filter ? query(resourcesRef, where("type", "==", filter)) : resourcesRef;
+        // Apply filter if set
+        const queryRef = filter
+            ? resourcesCollection.where("type", "==", filter)
+            : resourcesCollection;
 
-        const unsubscribe = onSnapshot(q, (snapshot: { docs: any[]; }) => {
-            setResources(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Resource)));
+        // Subscribe to real-time updates
+        const unsubscribe = queryRef.onSnapshot((snapshot) => {
+            setResources(snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            })) as Resource[]);
         });
 
         // Cleanup subscription on unmount
         return () => unsubscribe();
-    }, [filter]);
+    }, [filter])
 
     const filteredResources = resources.filter(
         (resource) =>
@@ -47,7 +54,7 @@ export default function TabTwoScreen() {
                     the filters below.
                 </ThemedText>
             </View>
-            <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter}/>
+            <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter} previousPath={"/list"}/>
             <ScrollView style={styles.scrollContainer}>
                 {filteredResources.length > 0 ? (
                     filteredResources.map((resource) => (

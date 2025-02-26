@@ -10,9 +10,11 @@ import {
     doc,
     getDoc,
     persistentLocalCache,
-    persistentMultipleTabManager,
+    persistentSingleTabManager,
     initializeFirestore
 } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// import firestore from "@react-native-firebase/firestore";
 
 // Optionally import the services that you want to use
 // import {...} from 'firebase/auth';
@@ -32,11 +34,16 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const firestore = initializeFirestore(app,
-    {localCache:
-            persistentLocalCache({tabManager: persistentMultipleTabManager()})
-    });
+const firestore = initializeFirestore(app, {
+    localCache: persistentLocalCache({
+        tabManager: persistentSingleTabManager(), // Single-tab persistence (multi-tab not supported in React Native)
+        storage: AsyncStorage, // Use AsyncStorage instead of IndexedDB
+    }),
+});
 
+// firestore().settings({
+//     persistence: true, // Uses SQLite instead of IndexedDB
+// });
 
 export {
     firestore,
