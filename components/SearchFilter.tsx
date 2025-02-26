@@ -25,7 +25,7 @@ export function SearchFilter({text, setText, filter, setFilter, setIsFocused, pr
                     onFocus={() => setIsFocused && setIsFocused(true)}
                 />
                 <TouchableOpacity style={styles.filterButton} onPress={() => router.push({
-                    pathname: "/modal",
+                    pathname: "/filter",
                     params: { from: previousPath }
                 })}>
                     <Ionicons name="options" size={24} color="black" />

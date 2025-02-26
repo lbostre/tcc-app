@@ -7,7 +7,7 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router, useLocalSearchParams } from 'expo-router';
 
-export default function Modal() {
+export default function Filter() {
     const { from } = useLocalSearchParams<{ from: "/" | "/list" }>();
     const [day, setDay] = useState("Select");
     const [time, setTime] = useState(new Date());

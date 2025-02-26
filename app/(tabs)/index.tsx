@@ -1,32 +1,43 @@
-import { Keyboard, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+    Keyboard,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import Map from "../../components/Map";
-import { SearchFilter } from '@/components/SearchFilter';
-import { useEffect, useState } from 'react';
-import {  Resource, ResourceMarker } from '@/utils/types';
-import { getCoordinates } from '@/utils/geolocation';
-import { SearchResult } from '@/components/SearchResult';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { useLocalSearchParams } from 'expo-router';
+import { SearchFilter } from "@/components/SearchFilter";
+import { useEffect, useState } from "react";
+import { Resource, ResourceMarker } from "@/utils/types";
+import { getCoordinates } from "@/utils/geolocation";
+import { SearchResult } from "@/components/SearchResult";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { useLocalSearchParams } from "expo-router";
+import { firestore } from "@/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function HomeScreen() {
     const { name } = useLocalSearchParams();
     const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
-    const [resourceMarkers, setResourceMarkers] = useState<ResourceMarker[]>([]);
-    const [selectedResourceMarker, setSelectedResourceMarker] = useState<ResourceMarker | null>();
+    const [resourceMarkers, setResourceMarkers] = useState<ResourceMarker[]>(
+        []
+    );
+    const [selectedResourceMarker, setSelectedResourceMarker] =
+        useState<ResourceMarker | null>();
     const [loading, setLoading] = useState<boolean>(true);
     const [isFocused, setIsFocused] = useState<boolean>(false);
 
     const fetchData = async () => {
         setLoading(true); // Start loading
         try {
-            const resourcesRef = firestore().collection("resources");
-            const resourcesSnapshot = await resourcesRef.get();
+            const resourcesRef = collection(firestore, "resources");
+            const resourcesSnapshot = await getDocs(resourcesRef);
 
             const fetchedResources: Resource[] = resourcesSnapshot.docs.map(
-                (doc) => ({ id: doc.id, ...doc.data() }) as Resource
+                (doc) => ({ id: doc.id, ...doc.data() } as Resource)
             );
 
             const markerPromises = fetchedResources.map(async (resource) => {
@@ -42,8 +53,8 @@ export default function HomeScreen() {
                             marker: {
                                 latlng: coords,
                                 title: resource.name,
-                                type: resource.type
-                            }
+                                type: resource.type,
+                            },
                         };
                     }
                 } catch (error) {
@@ -52,7 +63,9 @@ export default function HomeScreen() {
                 return null;
             });
 
-            const resolvedResourceMarkers = (await Promise.all(markerPromises)).filter(Boolean) as ResourceMarker[];
+            const resolvedResourceMarkers = (
+                await Promise.all(markerPromises)
+            ).filter(Boolean) as ResourceMarker[];
             setResourceMarkers(resolvedResourceMarkers);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -61,55 +74,94 @@ export default function HomeScreen() {
         }
     };
 
-
     useEffect(() => {
         fetchData();
-        if(name) {
-            const marker = resourceMarkers.find(marker => marker.resource.name === name);
-            if(marker) {
-                setSelectedResourceMarker(marker)
+        if (name) {
+            const marker = resourceMarkers.find(
+                (marker) => marker.resource.name === name
+            );
+            if (marker) {
+                setSelectedResourceMarker(marker);
             }
         }
     }, [name]);
 
     const filteredResourceMarkers = resourceMarkers.filter(
         (resourceMarker) =>
-            resourceMarker.resource.name.toLowerCase().includes(text.toLowerCase()) &&
+            resourceMarker.resource.name
+                .toLowerCase()
+                .includes(text.toLowerCase()) &&
             (resourceMarker.resource.type === filter || filter === "")
     );
 
     return (
-            <ThemedView style={styles.container}>
-                <View style={styles.topContainer}>
-                    <View style={styles.headerContainer}><
-                        ThemedText type="title">Map</ThemedText>
-                        {isFocused && <TouchableOpacity onPress={() => {
-                            setIsFocused(false)
-                            Keyboard.dismiss()
-                        }}>
-                            <AntDesign name="closecircleo" size={24} color="black"/>
-                        </TouchableOpacity>}
-                    </View>
-                    <SearchFilter text={text} setText={setText} setFilter={setFilter} setIsFocused={setIsFocused}
-                                  filter={filter} previousPath={"/"}/>
-                </View>
-                {isFocused ? <ScrollView style={styles.resultsContainer}>
-                    {filteredResourceMarkers.length > 0 ? (filteredResourceMarkers.map((res) => {
-                        return <SearchResult key={res.resource.name} text={res.resource.name} type={res.resource.type} onPress={() => {
-                            setSelectedResourceMarker(res)
-                            setTimeout(() => {
+        <ThemedView style={styles.container}>
+            <View style={styles.topContainer}>
+                <View style={styles.headerContainer}>
+                    <ThemedText type="title">Map</ThemedText>
+                    {isFocused && (
+                        <TouchableOpacity
+                            onPress={() => {
                                 setIsFocused(false);
-                            }, 300);
-                        }}/>
-                    })) : <ThemedText>No resources found</ThemedText>}
-                </ScrollView> :
-                <View style={styles.mapContainer}>
-                    {loading ? <ThemedText >Loading...</ThemedText>: <Map resourceMarkers={resourceMarkers}
-                                                                          selectedResourceMarker={selectedResourceMarker}
-                                                                          setSelectedResourceMarker={setSelectedResourceMarker} isFocused={isFocused}/>}
+                                Keyboard.dismiss();
+                            }}
+                        >
+                            <AntDesign
+                                name="closecircleo"
+                                size={24}
+                                color="black"
+                            />
+                        </TouchableOpacity>
+                    )}
                 </View>
-                }
-            </ThemedView>
+                <SearchFilter
+                    text={text}
+                    setText={setText}
+                    setFilter={setFilter}
+                    setIsFocused={setIsFocused}
+                    filter={filter}
+                    previousPath={"/"}
+                />
+            </View>
+            {isFocused ? (
+                <ScrollView style={styles.resultsContainer}>
+                    {filteredResourceMarkers.length > 0 ? (
+                        filteredResourceMarkers.map((res) => {
+                            return (
+                                <SearchResult
+                                    key={res.resource.name}
+                                    text={res.resource.name}
+                                    type={res.resource.type}
+                                    onPress={() => {
+                                        setSelectedResourceMarker(res);
+                                        setTimeout(() => {
+                                            setIsFocused(false);
+                                        }, 300);
+                                    }}
+                                />
+                            );
+                        })
+                    ) : (
+                        <ThemedText>No resources found</ThemedText>
+                    )}
+                </ScrollView>
+            ) : (
+                <View style={styles.mapContainer}>
+                    {loading ? (
+                        <ThemedText>Loading...</ThemedText>
+                    ) : (
+                        <Map
+                            resourceMarkers={resourceMarkers}
+                            selectedResourceMarker={selectedResourceMarker}
+                            setSelectedResourceMarker={
+                                setSelectedResourceMarker
+                            }
+                            isFocused={isFocused}
+                        />
+                    )}
+                </View>
+            )}
+        </ThemedView>
     );
 }
 
