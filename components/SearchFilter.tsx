@@ -14,8 +14,8 @@ type SearchFilterProps = {
 
 export function SearchFilter({text, setText, filter, setFilter, setIsFocused, previousPath}: SearchFilterProps) {
     return (
-        <>
-            <View style={styles.container}>
+        <View style={styles.container}>
+            <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
                     onChangeText={setText}
@@ -32,17 +32,22 @@ export function SearchFilter({text, setText, filter, setFilter, setIsFocused, pr
                 </TouchableOpacity>
             </View>
             <TypeFilter setFilter={setFilter} filter={filter} />
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        flexDirection: "column",
+        gap: 6,
+        width: "100%",
+    },
+    inputContainer: {
         flexDirection: "row",
         alignItems:  "center",
         gap: 6,
         width: "100%",
-        maxHeight: 40
+        height: 40,
     },
     input: {
         height: 40,

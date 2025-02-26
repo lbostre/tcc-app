@@ -3,10 +3,11 @@ import {
     View,
     StyleSheet,
     Touchable,
-    TouchableOpacity,
+    TouchableOpacity, ScrollView,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 type FilterProps = {
     filter: string;
@@ -15,7 +16,7 @@ type FilterProps = {
 
 export function TypeFilter({ filter, setFilter }: FilterProps) {
     return (
-        <View style={styles.container}>
+        <ScrollView horizontal={true} contentContainerStyle={styles.scrollContainer}>
             <TouchableOpacity
                 style={{
                     ...styles.iconContainer,
@@ -47,6 +48,18 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
             <TouchableOpacity
                 style={{
                     ...styles.iconContainer,
+                    backgroundColor: filter === "Medical" ? "white" : "red",
+                    borderWidth: filter === "Medical" ? 3 : 0,
+                    borderColor: "red",
+                }}
+                onPress={() => filter === "Medical" ? setFilter("") : setFilter("Medical")}
+            >
+                <FontAwesome5 name="briefcase-medical" size={16} color={filter === "Medical" ? "red" : "white"} />
+                <Text style={{ ...styles.filterText, color: filter === "Medical" ? "red" : "white" }}>Shelter</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    ...styles.iconContainer,
                     borderWidth: filter === "Other" ? 3 : 0,
                     backgroundColor: filter === "Other" ? "white" : "gray",
                     borderColor: "darkgray",
@@ -55,15 +68,15 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
             >
                 <Text style={{ ...styles.filterText, color: filter === "Other" ? "gray" : "white" }}>Other</Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    scrollContainer: {
         flexDirection: "row",
-        flexWrap: "wrap",
         gap: 5,
+        paddingHorizontal: 10,
     },
     iconContainer: {
         flexDirection: "row",
