@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 type ResourceIconProps = {
     type: string,
@@ -39,6 +40,19 @@ export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconP
                 <FontAwesome6 name="house" size={size === "sm" ?16: 42} color="white" />
             </View>
         );
+    } else if(type === "Medical") {
+        return (
+            <View
+                style={{
+                    ...(size === "sm" ? styles.iconContainer : styles.iconContainerLarge),
+                    backgroundColor: "red",
+                    borderColor: "white",
+                    borderWidth: outline ? 2 : 0,
+                }}
+            >
+                <FontAwesome5 name="briefcase-medical" size={size === "sm" ? 16: 42} color="white" />
+            </View>
+        )
     }
 }
 
