@@ -67,9 +67,10 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         flex: 1,
         padding: 32,
-        paddingVertical: 56,
+        paddingTop: 56,
         gap: 14,
         overflow: "hidden",
+        paddingBottom: 90
     },
     scrollContainer: {
         paddingBottom: 48,
