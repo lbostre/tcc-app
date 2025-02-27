@@ -26,6 +26,9 @@ type Region = {
 export default function Map({resourceMarkers, selectedResourceMarker, setSelectedResourceMarker, isFocused}: MapProps) {
     const [region, setRegion] = useState(getInitialState());
     const mapRef = useRef<MapView | null>(null); // Reference for MapView
+    const onRegionChangeComplete = (newRegion: Region) => {
+        setRegion(newRegion); // Keeps track of latitudeDelta and longitudeDelta
+    };
 
     function getInitialState() {
         // Lafayette, IN
@@ -39,7 +42,12 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
 
     const animateToRegion = (newRegion: Region) => {
         if (mapRef.current) {
-            mapRef.current.animateToRegion(newRegion, 400);
+            mapRef.current.animateToRegion({
+                latitude: newRegion.latitude,
+                longitude: newRegion.longitude,
+                latitudeDelta: region.latitudeDelta,
+                longitudeDelta: region.longitudeDelta,
+            }, 400);
         }
     };
 
@@ -83,6 +91,7 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                 initialRegion={region}
                 style={styles.map}
                 showsUserLocation={true}
+                onRegionChangeComplete={onRegionChangeComplete} // Track zoom level
             >
                 {resourceMarkers.map((resMarker, index) => (
                     <Marker
