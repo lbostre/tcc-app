@@ -55,7 +55,7 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
                 onPress={() => filter === "Medical" ? setFilter("") : setFilter("Medical")}
             >
                 <FontAwesome5 name="briefcase-medical" size={16} color={filter === "Medical" ? "red" : "white"} />
-                <Text style={{ ...styles.filterText, color: filter === "Medical" ? "red" : "white" }}>Shelter</Text>
+                <Text style={{ ...styles.filterText, color: filter === "Medical" ? "red" : "white" }}>Medical</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={{
