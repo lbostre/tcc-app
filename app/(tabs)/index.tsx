@@ -1,4 +1,5 @@
 import {
+    ActivityIndicator,
     Keyboard,
     ScrollView,
     StyleSheet,
@@ -153,7 +154,9 @@ export default function HomeScreen() {
             ) : (
                 <View style={styles.mapContainer}>
                     {loading ? (
-                        <ThemedText>Loading...</ThemedText>
+                        <View style={styles.loadingContainer}>
+                            <ActivityIndicator size="large"/>
+                        </View>
                     ) : (
                         <Map
                             resourceMarkers={filteredMapResourceMarkers}
@@ -214,6 +217,10 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 550,
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+    }
 });
 
 //     <HelloWave />

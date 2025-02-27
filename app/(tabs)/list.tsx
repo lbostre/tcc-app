@@ -1,7 +1,7 @@
 import {
     StyleSheet,
     View,
-    ScrollView,
+    ScrollView, ActivityIndicator,
 } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
@@ -13,31 +13,56 @@ import { Resource } from '@/utils/types';
 import { useLocalSearchParams } from 'expo-router';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import {firestore} from "@/firebaseConfig";
+import { isOpen } from '@/utils/times';
+import Entypo from '@expo/vector-icons/Entypo';
 
 export default function TabTwoScreen() {
-    const {day, time} = useLocalSearchParams();
+    const {day, time}: {day: string, time: string} = useLocalSearchParams();
     const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
     const [resources, setResources] = useState<Resource[]>([]);
-    console.log(day, time)
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
+        setLoading(true)
         const resourcesRef = collection(firestore, "resources");
 
         const q = filter ? query(resourcesRef, where("type", "==", filter)) : resourcesRef;
 
-        const unsubscribe = onSnapshot(q, (snapshot: { docs: any[]; }) => {
+        const unsubscribe = onSnapshot(q, (snapshot) => {
             setResources(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Resource)));
+            setLoading(false);
+        }, (error) => {
+            console.error("Error fetching resources:", error);
+            setLoading(false);
         });
 
         // Cleanup subscription on unmount
+        setLoading(false)
         return () => unsubscribe();
     }, [filter]);
 
-    const filteredResources = resources.filter(
-        (resource) =>
+    const filteredResources = resources.filter((resource) => {
+        const date = new Date(time);
+        const formattedTime = date.toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        });
+        return (
             resource.name.toLowerCase().includes(text.toLowerCase()) &&
-            (resource.type === filter || filter === "")
-    );
+            (resource.type === filter || filter === "") &&
+            (!day || !time || isOpen(formattedTime, day, resource.openTimes))
+        );
+    });
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large"/>
+            </View>
+        )
+    }
 
     return (
         <ThemedView style={styles.container}>
@@ -55,7 +80,10 @@ export default function TabTwoScreen() {
                             <ResourceCard resource={resource} key={resource.id} showMapButton={true}/>
                     ))
                 ) : (
-                    <ThemedText>No resources found</ThemedText>
+                    <View style={styles.noResourcesFoundContainer}>
+                        <Entypo name="magnifying-glass" size={40} color="black" />
+                        <ThemedText type="defaultSemiBold">No resources found</ThemedText>
+                    </View>
                 )}
             </ScrollView>
         </ThemedView>
@@ -82,4 +110,15 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         color: "#000",
     },
+    noResourcesFoundContainer: {
+        flex: 1,
+        justifyContent: "center",
+        gap: 10,
+        alignItems: "center",
+        paddingTop: 48,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+    }
 });

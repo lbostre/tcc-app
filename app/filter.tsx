@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, Platform, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
@@ -12,6 +12,7 @@ export default function Filter() {
     const [day, setDay] = useState("Select");
     const [time, setTime] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
+
     const showTimePicker = () => {
         if (Platform.OS === "android") {
             DateTimePickerAndroid.open({
@@ -28,61 +29,67 @@ export default function Filter() {
     };
 
     return (
-        <View style={styles.container}>
-            <ThemedText type="title">Filter</ThemedText>
-            <View style={styles.dayContainer}>
-                <ThemedText type="subtitle">Select Day</ThemedText>
-                <Picker
-                    selectedValue={day}
-                    onValueChange={(itemValue) => setDay(itemValue)}
-                    style={{ width: "100%" }}
-                >
-                    <Picker.Item label="Select Day" value="select" />
-                    <Picker.Item label="Monday" value="monday" />
-                    <Picker.Item label="Tuesday" value="tuesday" />
-                    <Picker.Item label="Wednesday" value="wednesday" />
-                    <Picker.Item label="Thursday" value="thursday" />
-                    <Picker.Item label="Friday" value="friday" />
-                    <Picker.Item label="Saturday" value="saturday" />
-                    <Picker.Item label="Sunday" value="sunday" />
-                </Picker>
-            </View>
-            <ThemedText type="subtitle">Select Time</ThemedText>
-            <TouchableOpacity style={styles.showTimePickerButton} onPress={showTimePicker}>
-                <ThemedText>Select Time</ThemedText>
-                <AntDesign name="clockcircleo" size={20} color="black" />
-            </TouchableOpacity>
-            <Text>Selected Time: {time.toLocaleTimeString()}</Text>
-            {Platform.OS === "ios" && showPicker && (
-                <DateTimePicker
-                    value={time}
-                    mode="time"
-                    is24Hour={true}
-                    display="spinner"
-                    onChange={(event, selectedDate) => {
-                        setShowPicker(false);
-                        if (selectedDate) setTime(selectedDate);
-                    }}
-                />
-            )}
-            <View style={styles.bottomButtonContainer}>
-                <TouchableOpacity style={{ ...styles.bottomButton }} onPress={() => console.log("clear")}>
-                    <ThemedText type="defaultSemiBold">Clear</ThemedText>
+        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+            <View style={styles.container}>
+                <ThemedText type="title">Filter</ThemedText>
+                <View style={styles.dayContainer}>
+                    <ThemedText type="subtitle">Select Day</ThemedText>
+                    <Picker
+                        selectedValue={day}
+                        onValueChange={(itemValue) => setDay(itemValue)}
+                        style={{ width: "100%" }}
+                    >
+                        <Picker.Item label="Select Day" value="select" />
+                        <Picker.Item label="Monday" value="Monday" />
+                        <Picker.Item label="Tuesday" value="Tuesday" />
+                        <Picker.Item label="Wednesday" value="Wednesday" />
+                        <Picker.Item label="Thursday" value="Thursday" />
+                        <Picker.Item label="Friday" value="Friday" />
+                        <Picker.Item label="Saturday" value="Saturday" />
+                        <Picker.Item label="Sunday" value="Sunday" />
+                    </Picker>
+                </View>
+                <ThemedText type="subtitle">Select Time</ThemedText>
+                <TouchableOpacity style={styles.showTimePickerButton} onPress={showTimePicker}>
+                    <ThemedText>Select Time</ThemedText>
+                    <AntDesign name="clockcircleo" size={20} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity style={{ ...styles.bottomButton, backgroundColor: "black" }} onPress={() => router.replace({ pathname: from, params: { day: day, time: time.toISOString() } })}>
-                    <ThemedText type="defaultSemiBold" style={{color: "white"}}>Apply</ThemedText>
-                </TouchableOpacity>
+                <Text>Selected Time: {time.toLocaleTimeString()}</Text>
+                {Platform.OS === "ios" && showPicker && (
+                    <DateTimePicker
+                        value={time}
+                        mode="time"
+                        is24Hour={true}
+                        display="spinner"
+                        onChange={(event, selectedDate) => {
+                            setShowPicker(false);
+                            if (selectedDate) setTime(selectedDate);
+                        }}
+                    />
+                )}
+                <View style={styles.bottomButtonContainer}>
+                    <TouchableOpacity style={{ ...styles.bottomButton }} onPress={() => router.replace({ pathname: from, params: { day: null, time: null}})}>
+                        <ThemedText type="defaultSemiBold">Reset</ThemedText>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ ...styles.bottomButton, backgroundColor: "black" }} onPress={() => router.replace({ pathname: from, params: { day: day, time: time.toISOString()}})}>
+                        <ThemedText type="defaultSemiBold" style={{color: "white"}}>Apply</ThemedText>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        padding: 32,
+        paddingVertical: 24,
+
+    },
     container: {
         flexDirection: "column",
         flex: 1,
-        padding: 32,
-        paddingVertical: 24,
         gap: 14,
         overflow: "hidden",
     },
