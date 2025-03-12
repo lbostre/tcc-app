@@ -3,10 +3,8 @@ import MapView, { Marker } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 import { Resource, ResourceMarker } from '@/utils/types';
 import { ResourceCard } from '@/components/ResourceCard';
-import { ThemedText } from '@/components/ThemedText';
 import * as Location from "expo-location";
 import { ResourceIcon } from '@/components/ResourceIcon';
-import { useLocalSearchParams } from 'expo-router';
 
 
 type MapProps = {
