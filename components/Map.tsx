@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Animated, Platform } from "react-native";
 import { Resource, ResourceMarker } from '@/utils/types';
 import { ResourceCard } from '@/components/ResourceCard';
 import { ThemedText } from '@/components/ThemedText';
@@ -64,6 +64,7 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
         }
     };
 
+
     useEffect(() => {
         (async () => {
             const { status } = await Location.requestForegroundPermissionsAsync();
@@ -112,13 +113,11 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                         key={index}
                         coordinate={resMarker.marker.latlng}
                         onPress={() => handleMarkerOnPress(resMarker)}
-                        style={{
-                            transform: [
-                                { scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 2 : 1 }
-                            ]
-                        }}
+                        style={{padding: Platform.OS === "android" ? 10 : 0}}
                     >
-                        <ResourceIcon type={resMarker.resource.type} outline={true}/>
+                        <Animated.View style={{ transform: [{ scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 1.8 : 1 }] }}>
+                            <ResourceIcon type={resMarker.resource.type} outline={true} />
+                        </Animated.View>
                     </Marker>
                 ))}
             </MapView>

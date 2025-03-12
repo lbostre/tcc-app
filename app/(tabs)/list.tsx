@@ -75,7 +75,8 @@ export default function TabTwoScreen() {
             </View>
             <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter} previousPath={"/list"}/>
             <ScrollView style={styles.scrollContainer} contentContainerStyle={{
-                rowGap: 10
+                rowGap: 10,
+                paddingBottom: 90
             }}>
                 {filteredResources.length > 0 ? (
                     filteredResources.map((resource) => (
@@ -99,11 +100,12 @@ const styles = StyleSheet.create({
         padding: 32,
         paddingTop: 56,
         gap: 14,
+        paddingBottom: 0,
         overflow: "hidden",
-        paddingBottom: 90
     },
     scrollContainer: {
-        paddingBottom: 48,
+        paddingBottom: 100,
+        height: "100%"
     },
     input: {
         height: 40,

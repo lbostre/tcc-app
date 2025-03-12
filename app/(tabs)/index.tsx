@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
+    Platform
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
         width: "100%",
-        height: "75%",
+        height: Platform.OS === "ios" ? "75%" : "85%",
     },
     loadingContainer: {
         flex: 1,
