@@ -127,6 +127,7 @@ export default function HomeScreen() {
                     setIsFocused={setIsFocused}
                     filter={filter}
                     previousPath={"/"}
+                    showTimeFilter={false}
                 />
             </View>
             {isFocused ? (

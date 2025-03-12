@@ -10,26 +10,27 @@ type SearchFilterProps = {
     setFilter: (text: string) => void;
     setIsFocused?: (isFocused: boolean) => void;
     previousPath: string;
+    showTimeFilter?: boolean
 }
 
-export function SearchFilter({text, setText, filter, setFilter, setIsFocused, previousPath}: SearchFilterProps) {
+export function SearchFilter({text, setText, filter, setFilter, setIsFocused, previousPath, showTimeFilter = true}: SearchFilterProps) {
     return (
         <View style={styles.container}>
             <View style={styles.inputContainer}>
                 <TextInput
-                    style={styles.input}
+                    style={showTimeFilter ? styles.input : styles.inputFull}
                     onChangeText={setText}
                     value={text}
                     placeholder="Search for resources..."
                     placeholderTextColor="gray"
                     onFocus={() => setIsFocused && setIsFocused(true)}
                 />
-                <TouchableOpacity style={styles.filterButton} onPress={() => router.push({
+                {showTimeFilter && <TouchableOpacity style={styles.filterButton} onPress={() => router.push({
                     pathname: "/filter",
                     params: { from: previousPath }
                 })}>
-                    <Ionicons name="options" size={24} color="black" />
-                </TouchableOpacity>
+                    <Ionicons name="options" size={24} color="black"/>
+                </TouchableOpacity>}
             </View>
             <TypeFilter setFilter={setFilter} filter={filter} />
         </View>
@@ -56,6 +57,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         color: "#000",
         width: "90%"
+    },
+    inputFull: {
+        height: 40,
+        padding: 12,
+        backgroundColor: "#f7f7f7",
+        borderRadius: 5,
+        color: "#000",
+        width: "100%"
     },
     filterButton: {
         flexDirection: "column",

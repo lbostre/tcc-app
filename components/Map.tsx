@@ -23,6 +23,19 @@ type Region = {
     longitudeDelta: number,
 }
 
+const mapStyle =
+    [
+        {
+            "featureType": "poi",
+            "elementType": "labels",
+            "stylers": [
+                {
+                    "visibility": "off",
+                },
+            ],
+        }
+    ]
+
 export default function Map({resourceMarkers, selectedResourceMarker, setSelectedResourceMarker, isFocused}: MapProps) {
     const [region, setRegion] = useState(getInitialState());
     const mapRef = useRef<MapView | null>(null); // Reference for MapView
@@ -92,6 +105,7 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                 style={styles.map}
                 showsUserLocation={true}
                 onRegionChangeComplete={onRegionChangeComplete} // Track zoom level
+                customMapStyle={mapStyle}
             >
                 {resourceMarkers.map((resMarker, index) => (
                     <Marker
