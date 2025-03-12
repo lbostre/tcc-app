@@ -74,7 +74,9 @@ export default function TabTwoScreen() {
                 </ThemedText>
             </View>
             <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter} previousPath={"/list"}/>
-            <ScrollView style={styles.scrollContainer}>
+            <ScrollView style={styles.scrollContainer} contentContainerStyle={{
+                rowGap: 10
+            }}>
                 {filteredResources.length > 0 ? (
                     filteredResources.map((resource) => (
                             <ResourceCard resource={resource} key={resource.id} showMapButton={true}/>

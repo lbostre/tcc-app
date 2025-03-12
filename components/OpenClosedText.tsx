@@ -11,7 +11,7 @@ export function OpenClosedText({ hours }: OpenClosedTextProps) {
         const dayIndex = (now.getDay() + 6) % 7; // Convert Sunday-based index to Monday-based
         const todayHours = openTimes[dayIndex];
 
-        if (todayHours === "Closed") return { status: "closedToday" };
+        if (todayHours === "Closed" || !todayHours) return { status: "closedToday" };
 
         const [openTime, closeTime] = todayHours.split(" - ").map((timeStr) => {
             const [time, period] = timeStr.split(" ");

@@ -40,7 +40,6 @@ export default function HomeScreen() {
             const fetchedResources: Resource[] = resourcesSnapshot.docs.map(
                 (doc) => ({ id: doc.id, ...doc.data() } as Resource)
             );
-
             const markerPromises = fetchedResources.map(async (resource) => {
                 try {
                     const formattedAddress = resource.address.includes(",")
@@ -216,7 +215,7 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
         width: "100%",
-        height: 550,
+        height: "100%",
     },
     loadingContainer: {
         flex: 1,
