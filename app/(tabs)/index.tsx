@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     },
     mapContainer: {
         width: "100%",
-        height: "100%",
+        height: "75%",
     },
     loadingContainer: {
         flex: 1,
