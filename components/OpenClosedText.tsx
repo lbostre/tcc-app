@@ -39,7 +39,7 @@ export function OpenClosedText({ hours }: OpenClosedTextProps) {
                     status === "openNow" ? styles.openText : styles.closedText
                 }
             >
-                {status === "openNow" ? "Open Now" : "Closed"}
+                {status === "openNow" ? "Open Now" : "Closed Now"}
             </Text>
             {status === "openNow" && (
                 <Text style={styles.hoursText}>{todayHours}</Text>
