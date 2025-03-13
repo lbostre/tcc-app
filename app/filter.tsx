@@ -53,8 +53,8 @@ export default function Filter() {
                     <AntDesign name="clockcircleo" size={20} color="black" />
                 </TouchableOpacity>}
 
-                <View style={styles.timeContainer}>
-                    {Platform.OS === "ios" && <ThemedText>Edit Time: </ThemedText>}
+                {Platform.OS === "ios" && <View style={styles.timeContainer}>
+                    <ThemedText>Edit Time: </ThemedText>
                     <DateTimePicker
                         value={time}
                         mode="time"
@@ -64,6 +64,7 @@ export default function Filter() {
                         }}
                     />
                 </View>
+                }
                 <View style={styles.bottomButtonContainer}>
                     <TouchableOpacity style={{ ...styles.bottomButton }} onPress={() => router.replace({ pathname: from, params: { day: null, time: null}})}>
                         <ThemedText type="defaultSemiBold">Reset</ThemedText>
