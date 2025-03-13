@@ -22,6 +22,14 @@ export default function TabTwoScreen() {
     const [filter, setFilter] = useState("");
     const [resources, setResources] = useState<Resource[]>([]);
     const [loading, setLoading] = useState(true);
+    let timeString = ""
+    if(time) {
+        timeString = new Intl.DateTimeFormat('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true, // Ensures it's in AM/PM format
+            }).format(new Date(time));
+    }
 
     useEffect(() => {
         setLoading(true)
@@ -74,6 +82,9 @@ export default function TabTwoScreen() {
                 </ThemedText>
             </View>
             <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter} previousPath={"/list"}/>
+            {day && timeString && <ThemedText>
+                    Filter: {day} at {timeString}
+            </ThemedText>}
             <ScrollView style={styles.scrollContainer} contentContainerStyle={{
                 rowGap: 10,
                 paddingBottom: 90
