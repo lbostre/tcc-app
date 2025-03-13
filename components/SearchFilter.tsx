@@ -1,5 +1,7 @@
-import { StyleSheet, TextInput, useColorScheme } from 'react-native';
-import { Filter } from '@/components/Filter';
+import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { router } from 'expo-router';
+import { TypeFilter } from './TypeFilter';
 
 type SearchFilterProps = {
     text: string;
@@ -7,35 +9,46 @@ type SearchFilterProps = {
     filter: string;
     setFilter: (text: string) => void;
     setIsFocused?: (isFocused: boolean) => void;
+    previousPath: string;
+    showTimeFilter?: boolean
 }
 
-export function SearchFilter({text, setText, filter, setFilter, setIsFocused}: SearchFilterProps) {
+export function SearchFilter({text, setText, filter, setFilter, setIsFocused, previousPath, showTimeFilter = true}: SearchFilterProps) {
     return (
-        <>
-            <TextInput
-                style={styles.input}
-                onChangeText={setText}
-                value={text}
-                placeholder="Search for resources..."
-                placeholderTextColor="gray"
-                onFocus={() => setIsFocused && setIsFocused(true)}
-            />
-            <Filter setFilter={setFilter} filter={filter} />
-        </>
+        <View style={styles.container}>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={showTimeFilter ? styles.input : styles.inputFull}
+                    onChangeText={setText}
+                    value={text}
+                    placeholder="Search for resources..."
+                    placeholderTextColor="gray"
+                    onFocus={() => setIsFocused && setIsFocused(true)}
+                />
+                {showTimeFilter && <TouchableOpacity style={styles.filterButton} onPress={() => router.push({
+                    pathname: "/filter",
+                    params: { from: previousPath }
+                })}>
+                    <Ionicons name="options" size={24} color="black"/>
+                </TouchableOpacity>}
+            </View>
+            <TypeFilter setFilter={setFilter} filter={filter} />
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: "column",
-        flex: 1,
-        padding: 32,
-        paddingVertical: 56,
-        gap: 14,
-        overflow: "hidden",
+        gap: 6,
+        width: "100%",
     },
-    scrollContainer: {
-        paddingBottom: 48,
+    inputContainer: {
+        flexDirection: "row",
+        alignItems:  "center",
+        gap: 6,
+        width: "100%",
+        height: 40,
     },
     input: {
         height: 40,
@@ -43,5 +56,23 @@ const styles = StyleSheet.create({
         backgroundColor: "#f7f7f7",
         borderRadius: 5,
         color: "#000",
+        width: "90%"
     },
+    inputFull: {
+        height: 40,
+        padding: 12,
+        backgroundColor: "#f7f7f7",
+        borderRadius: 5,
+        color: "#000",
+        width: "100%"
+    },
+    filterButton: {
+        flexDirection: "column",
+        height: "100%",
+        padding: 8,
+        backgroundColor: "#f7f7f7",
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: "center",
+    }
 });

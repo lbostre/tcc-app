@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Animated, Platform } from "react-native";
 import { Resource, ResourceMarker } from '@/utils/types';
 import { ResourceCard } from '@/components/ResourceCard';
 import * as Location from "expo-location";
@@ -21,9 +21,25 @@ type Region = {
     longitudeDelta: number,
 }
 
+const mapStyle =
+    [
+        {
+            "featureType": "poi",
+            "elementType": "labels",
+            "stylers": [
+                {
+                    "visibility": "off",
+                },
+            ],
+        }
+    ]
+
 export default function Map({resourceMarkers, selectedResourceMarker, setSelectedResourceMarker, isFocused}: MapProps) {
     const [region, setRegion] = useState(getInitialState());
     const mapRef = useRef<MapView | null>(null); // Reference for MapView
+    const onRegionChangeComplete = (newRegion: Region) => {
+        setRegion(newRegion); // Keeps track of latitudeDelta and longitudeDelta
+    };
 
     function getInitialState() {
         // Lafayette, IN
@@ -37,9 +53,15 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
 
     const animateToRegion = (newRegion: Region) => {
         if (mapRef.current) {
-            mapRef.current.animateToRegion(newRegion, 400);
+            mapRef.current.animateToRegion({
+                latitude: newRegion.latitude,
+                longitude: newRegion.longitude,
+                latitudeDelta: region.latitudeDelta,
+                longitudeDelta: region.longitudeDelta,
+            }, 400);
         }
     };
+
 
     useEffect(() => {
         (async () => {
@@ -81,19 +103,19 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                 initialRegion={region}
                 style={styles.map}
                 showsUserLocation={true}
+                onRegionChangeComplete={onRegionChangeComplete} // Track zoom level
+                customMapStyle={mapStyle}
             >
                 {resourceMarkers.map((resMarker, index) => (
                     <Marker
                         key={index}
                         coordinate={resMarker.marker.latlng}
                         onPress={() => handleMarkerOnPress(resMarker)}
-                        style={{
-                            transform: [
-                                { scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 2 : 1 }
-                            ]
-                        }}
+                        style={{padding: Platform.OS === "android" ? 10 : 0}}
                     >
-                        <ResourceIcon type={resMarker.resource.type} outline={true}/>
+                        <Animated.View style={{ transform: [{ scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 1.8 : 1 }] }}>
+                            <ResourceIcon type={resMarker.resource.type} outline={true} />
+                        </Animated.View>
                     </Marker>
                 ))}
             </MapView>

@@ -29,6 +29,13 @@ export function ResourceCard({ resource, showMapButton = false }: ResourceCardPr
     const { name, type, openTimes } = resource;
     const router = useRouter();
 
+    const limitTitleLength = (title: string) => {
+        if(title.length > 40) {
+            return title.substring(0, 40) + "..."
+        }
+        return title
+    }
+
     return (
         <TouchableOpacity
             onPress={() =>
@@ -45,7 +52,7 @@ export function ResourceCard({ resource, showMapButton = false }: ResourceCardPr
             <View><ResourceIcon type={type}/></View>
             <View style={styles.containerMiddle}>
                 <ThemedText darkColor="#000" type="subtitle">
-                    {name}
+                    {limitTitleLength(name)}
                 </ThemedText>
                 <Text style={styles.subheadingText}>{type}</Text>
                 <OpenClosedText hours={openTimes} />
@@ -77,7 +84,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#f7f7f7",
         borderRadius: 5,
         gap: 8,
-        marginBottom: 8,
     },
     containerMiddle: {
         flexDirection: "column",

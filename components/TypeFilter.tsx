@@ -3,23 +3,24 @@ import {
     View,
     StyleSheet,
     Touchable,
-    TouchableOpacity,
+    TouchableOpacity, ScrollView,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 type FilterProps = {
     filter: string;
     setFilter: (filter: string) => void;
 };
 
-export function Filter({ filter, setFilter }: FilterProps) {
+export function TypeFilter({ filter, setFilter }: FilterProps) {
     return (
-        <View style={styles.container}>
+        <ScrollView horizontal={true} contentContainerStyle={styles.scrollContainer}>
             <TouchableOpacity
                 style={{
                     ...styles.iconContainer,
-                    backgroundColor: "green",
+                    backgroundColor: filter === "Food Pantry" ? "white" : "green",
                     borderWidth: filter === "Food Pantry" ? 3 : 0,
                     borderColor: "darkgreen",
                 }}
@@ -28,42 +29,54 @@ export function Filter({ filter, setFilter }: FilterProps) {
                 <MaterialCommunityIcons
                     name="silverware-fork-knife"
                     size={16}
-                    color="white"
+                    color={filter === "Food Pantry" ? "green" : "white"}
                 />
-                <Text style={styles.filterText}>Food Pantry</Text>
+                <Text style={{ ...styles.filterText, color: filter === "Food Pantry" ? "green" : "white" }}>Food Pantry</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={{
                     ...styles.iconContainer,
-                    backgroundColor: "orange",
+                    backgroundColor: filter === "Shelter" ? "white" : "orange",
                     borderWidth: filter === "Shelter" ? 3 : 0,
                     borderColor: "darkorange",
                 }}
                 onPress={() => filter === "Shelter" ? setFilter("") : setFilter("Shelter")}
             >
-                <FontAwesome6 name="house" size={14} color="white" />
-                <Text style={styles.filterText}>Shelter</Text>
+                <FontAwesome6 name="house" size={14} color={filter === "Shelter" ? "orange" : "white"} />
+                <Text style={{ ...styles.filterText, color: filter === "Shelter" ? "orange" : "white" }}>Shelter</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    ...styles.iconContainer,
+                    backgroundColor: filter === "Medical" ? "white" : "red",
+                    borderWidth: filter === "Medical" ? 3 : 0,
+                    borderColor: "red",
+                }}
+                onPress={() => filter === "Medical" ? setFilter("") : setFilter("Medical")}
+            >
+                <FontAwesome5 name="briefcase-medical" size={16} color={filter === "Medical" ? "red" : "white"} />
+                <Text style={{ ...styles.filterText, color: filter === "Medical" ? "red" : "white" }}>Medical</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={{
                     ...styles.iconContainer,
                     borderWidth: filter === "Other" ? 3 : 0,
-                    backgroundColor: "gray",
+                    backgroundColor: filter === "Other" ? "white" : "gray",
                     borderColor: "darkgray",
                 }}
                 onPress={() => filter === "Other" ? setFilter("") : setFilter("Other")}
             >
-                <Text style={styles.filterText}>Other</Text>
+                <Text style={{ ...styles.filterText, color: filter === "Other" ? "gray" : "white" }}>Other</Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    scrollContainer: {
         flexDirection: "row",
-        flexWrap: "wrap",
         gap: 5,
+        paddingHorizontal: 10,
     },
     iconContainer: {
         flexDirection: "row",

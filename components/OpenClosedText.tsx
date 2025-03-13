@@ -11,14 +11,13 @@ export function OpenClosedText({ hours }: OpenClosedTextProps) {
         const dayIndex = (now.getDay() + 6) % 7; // Convert Sunday-based index to Monday-based
         const todayHours = openTimes[dayIndex];
 
-        if (todayHours === "Closed") return { status: "closedToday" };
+        if (todayHours === "Closed" || !todayHours) return { status: "closedToday" };
 
         const [openTime, closeTime] = todayHours.split(" - ").map((timeStr) => {
             const [time, period] = timeStr.split(" ");
             let [hour, minute] = time.split(":").map(Number);
-
-            if (period === "pm" && hour !== 12) hour += 12;
-            if (period === "am" && hour === 12) hour = 0;
+            if (period.toLowerCase() === "pm" && hour !== 12) hour += 12;
+            if (period.toLowerCase() === "am" && hour === 12) hour = 0;
 
             return hour * 60 + minute; // Convert to minutes for easy comparison
         });
