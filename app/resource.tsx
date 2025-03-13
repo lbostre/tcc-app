@@ -13,6 +13,7 @@ import { ThemedView } from "@/components/ThemedView";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { ResourceIcon } from '@/components/ResourceIcon';
+import { useLayoutEffect } from "react";
 
 type Resource = {
     id: string;
@@ -27,7 +28,7 @@ type Resource = {
     openTimes: string[];
 };
 
-export default function ResourceScreen() {
+export default function ResourceScreen({navigation}: any) {
     const { resource } = useLocalSearchParams();
     const parsedResource = JSON.parse(
         Array.isArray(resource) ? resource[0] : resource
@@ -90,7 +91,7 @@ export default function ResourceScreen() {
 
     return (
         <>
-            <Stack.Screen options={{ title: name }} />
+            <Stack.Screen options={{ title: type }} />
             <ScrollView>
                 <ThemedView style={styles.container}>
                     <ResourceIcon type={type} size="lg"/>
@@ -264,6 +265,15 @@ const styles = StyleSheet.create({
         padding: 14,
         borderRadius: 5,
         alignItems: "center",
+        
+        // iOS shadow properties
+        shadowColor: "#000", // Color of the shadow
+        shadowOffset: { width: 0, height: 2 }, // Shadow's direction
+        shadowOpacity: 0.2, // Shadow opacity
+        shadowRadius: 4, // Radius of the shadow
+
+        // Android shadow properties
+        elevation: 6, // Elevation for Android (controls the shadow's size)
     },
     infoRowIconContainer: {
         alignItems: "center",

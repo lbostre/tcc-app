@@ -1,7 +1,7 @@
 import {
     StyleSheet,
     View,
-    ScrollView, ActivityIndicator,
+    ScrollView, ActivityIndicator, TouchableOpacity, Text
 } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
@@ -16,19 +16,25 @@ import {firestore} from "@/firebaseConfig";
 import { isOpen } from '@/utils/times';
 import Entypo from '@expo/vector-icons/Entypo';
 
+
 export default function TabTwoScreen() {
     const {day, time}: {day: string, time: string} = useLocalSearchParams();
     const [text, setText] = useState("");
     const [filter, setFilter] = useState("");
     const [resources, setResources] = useState<Resource[]>([]);
     const [loading, setLoading] = useState(true);
-    let timeString = ""
-    if(time) {
-        timeString = new Intl.DateTimeFormat('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true, // Ensures it's in AM/PM format
-            }).format(new Date(time));
+    const [filterDay, setFilterDay] = useState(day);
+    const [filterTime, setFilterTime] = useState(time);
+
+    const formatTime = (time: string) => {
+        if(time) {
+            return new Intl.DateTimeFormat('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true, // Ensures it's in AM/PM format
+                }).format(new Date(filterTime));
+        }
+        return ""
     }
 
     useEffect(() => {
@@ -51,7 +57,7 @@ export default function TabTwoScreen() {
     }, [filter]);
 
     const filteredResources = resources.filter((resource) => {
-        const date = new Date(time);
+        const date = new Date(filterTime);
         const formattedTime = date.toLocaleTimeString("en-GB", {
             hour: "2-digit",
             minute: "2-digit",
@@ -60,9 +66,14 @@ export default function TabTwoScreen() {
         return (
             resource.name.toLowerCase().includes(text.toLowerCase()) &&
             (resource.type === filter || filter === "") &&
-            (!day || !time || isOpen(formattedTime, day, resource.openTimes))
+            (!filterDay || !filterTime || isOpen(formattedTime, filterDay, resource.openTimes))
         );
     });
+
+    const clearFilter = () => {
+        setFilterDay("")
+        setFilterTime("")
+    }
 
     if (loading) {
         return (
@@ -71,6 +82,8 @@ export default function TabTwoScreen() {
             </View>
         )
     }
+
+    const timeString = formatTime(filterTime)
 
     return (
         <ThemedView style={styles.container}>
@@ -82,9 +95,19 @@ export default function TabTwoScreen() {
                 </ThemedText>
             </View>
             <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter} previousPath={"/list"}/>
-            {day && timeString && <ThemedText>
+            {filterDay && timeString && <View style={styles.belowTypeFilterContainer}> <ThemedText>
                     Filter: {day} at {timeString}
-            </ThemedText>}
+            </ThemedText>
+            <TouchableOpacity
+                style={{
+                    ...styles.clearFilterButton,
+                    backgroundColor: "gray",
+                }}
+                onPress={clearFilter}
+            >
+                <Text style={{ ...styles.filterText }}>Clear Filter</Text>
+            </TouchableOpacity>
+            </View>}
             <ScrollView style={styles.scrollContainer} contentContainerStyle={{
                 rowGap: 10,
                 paddingBottom: 90
@@ -135,5 +158,26 @@ const styles = StyleSheet.create({
     loadingContainer: {
         flex: 1,
         justifyContent: "center",
+    },
+    clearFilterButton: {
+        flexDirection: "row",
+        borderRadius: 5,
+        padding: 4,
+        paddingHorizontal: 8,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 2,
+        gap: 4,
+    },
+    filterText: {
+        fontSize: 18,
+        color: "white",
+    },
+    belowTypeFilterContainer: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "auto"
     }
 });

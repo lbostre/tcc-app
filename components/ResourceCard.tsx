@@ -30,8 +30,8 @@ export function ResourceCard({ resource, showMapButton = false }: ResourceCardPr
     const router = useRouter();
 
     const limitTitleLength = (title: string) => {
-        if(title.length > 40) {
-            return title.substring(0, 40) + "..."
+        if(title.length > 25) {
+            return title.substring(0, 25) + "..."
         }
         return title
     }
@@ -76,7 +76,7 @@ export function ResourceCard({ resource, showMapButton = false }: ResourceCardPr
 const styles = StyleSheet.create({
     touchableOpacity: {
         width: "100%",
-        maxHeight: 130,
+        maxHeight: 140,
     },
     container: {
         flexDirection: "row",
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
     subheadingText: {
-        fontSize: 14,
+        fontSize: 16,
         color: "#555",
         marginBottom: 6,
     },
@@ -114,5 +114,14 @@ const styles = StyleSheet.create({
         backgroundColor: "lightgray",
         padding: 5,
         borderRadius: 5,
+
+        // iOS shadow properties
+        shadowColor: "#000", // Color of the shadow
+        shadowOffset: { width: 0, height: 1 }, // Shadow's direction
+        shadowOpacity: 0.2, // Shadow opacity
+        shadowRadius: 3, // Radius of the shadow
+
+        // Android shadow properties
+        elevation: 3, // Elevation for Android (controls the shadow's size)
     }
 });

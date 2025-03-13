@@ -51,23 +51,23 @@ export function OpenClosedText({ hours }: OpenClosedTextProps) {
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        gap: 16,
+        gap: 12,
         alignItems: "center",
     },
     openText: {
         color: "green",
-        fontSize: 16,
+        fontSize: 18,
         lineHeight: 24,
         fontWeight: "600",
     },
     closedText: {
         color: "red",
-        fontSize: 16,
+        fontSize: 18,
         lineHeight: 24,
         fontWeight: "600",
     },
     hoursText: {
-        fontSize: 16,
+        fontSize: 18,
         lineHeight: 24,
     },
 });

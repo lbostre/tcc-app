@@ -17,7 +17,8 @@ export default function Filter() {
             DateTimePickerAndroid.open({
                 value: time,
                 mode: "time",
-                is24Hour: true,
+                is24Hour: false,
+                display: "spinner", 
                 onChange: (event, selectedDate) => {
                     if (selectedDate) setTime(selectedDate);
                 },

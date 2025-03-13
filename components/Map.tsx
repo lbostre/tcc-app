@@ -111,9 +111,9 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                         key={index}
                         coordinate={resMarker.marker.latlng}
                         onPress={() => handleMarkerOnPress(resMarker)}
-                        style={{padding: Platform.OS === "android" ? 10 : 0}}
+                        style={{padding: Platform.OS === "android" ? 12 : 0}}
                     >
-                        <Animated.View style={{ transform: [{ scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 1.8 : 1 }] }}>
+                        <Animated.View style={{ transform: [{ scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 1.9 : 1 }] }}>
                             <ResourceIcon type={resMarker.resource.type} outline={true} />
                         </Animated.View>
                     </Marker>
