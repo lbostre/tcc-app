@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Button, Platform, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -10,8 +10,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 export default function Filter() {
     const { from } = useLocalSearchParams<{ from: "/" | "/list" }>();
     const [day, setDay] = useState("Select");
-    const [time, setTime] = useState(new Date());
-    const [showPicker, setShowPicker] = useState(false);
+    const [time, setTime] = useState<Date>(new Date());
 
     const showTimePicker = () => {
         if (Platform.OS === "android") {
@@ -23,8 +22,6 @@ export default function Filter() {
                     if (selectedDate) setTime(selectedDate);
                 },
             });
-        } else {
-            setShowPicker(true);
         }
     };
 
@@ -50,23 +47,23 @@ export default function Filter() {
                     </Picker>
                 </View>
                 <ThemedText type="subtitle">Select Time</ThemedText>
+                {Platform.OS == "android" && 
                 <TouchableOpacity style={styles.showTimePickerButton} onPress={showTimePicker}>
                     <ThemedText>Select Time</ThemedText>
                     <AntDesign name="clockcircleo" size={20} color="black" />
-                </TouchableOpacity>
-                <Text>Selected Time: {time.toLocaleTimeString()}</Text>
-                {Platform.OS === "ios" && showPicker && (
+                </TouchableOpacity>}
+
+                <View style={styles.timeContainer}>
+                    {Platform.OS === "ios" && <ThemedText>Edit Time: </ThemedText>}
                     <DateTimePicker
                         value={time}
                         mode="time"
                         is24Hour={true}
-                        display="spinner"
                         onChange={(event, selectedDate) => {
-                            setShowPicker(false);
                             if (selectedDate) setTime(selectedDate);
                         }}
                     />
-                )}
+                </View>
                 <View style={styles.bottomButtonContainer}>
                     <TouchableOpacity style={{ ...styles.bottomButton }} onPress={() => router.replace({ pathname: from, params: { day: null, time: null}})}>
                         <ThemedText type="defaultSemiBold">Reset</ThemedText>
@@ -106,6 +103,12 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         borderRadius: 5,
         alignSelf: "flex-start",
+    },
+    timeContainer: {
+        display: "flex",
+        flexDirection: "row",
+        gap: 10,
+        alignItems: "center"
     },
     bottomButtonContainer: {
         flexDirection: "row",
