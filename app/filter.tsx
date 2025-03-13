@@ -48,22 +48,26 @@ export default function Filter() {
                 </View>
                 <ThemedText type="subtitle">Select Time</ThemedText>
                 {Platform.OS == "android" && 
-                <TouchableOpacity style={styles.showTimePickerButton} onPress={showTimePicker}>
-                    <ThemedText>Select Time</ThemedText>
-                    <AntDesign name="clockcircleo" size={20} color="black" />
-                </TouchableOpacity>}
-
-                {Platform.OS === "ios" && <View style={styles.timeContainer}>
-                    <ThemedText>Edit Time: </ThemedText>
-                    <DateTimePicker
-                        value={time}
-                        mode="time"
-                        is24Hour={true}
-                        onChange={(event, selectedDate) => {
-                            if (selectedDate) setTime(selectedDate);
-                        }}
-                    />
-                </View>
+                    <>
+                        <TouchableOpacity style={styles.showTimePickerButton} onPress={showTimePicker}>
+                            <ThemedText>Select Time</ThemedText>
+                            <AntDesign name="clockcircleo" size={20} color="black" />
+                        </TouchableOpacity>
+                        <ThemedText>Selected Time: {time.toLocaleTimeString()}</ThemedText>
+                    </>
+                }
+                {Platform.OS === "ios" && 
+                    <View style={styles.timeContainer}>
+                        <ThemedText>Edit Time: </ThemedText>
+                        <DateTimePicker
+                            value={time}
+                            mode="time"
+                            is24Hour={true}
+                            onChange={(event, selectedDate) => {
+                                if (selectedDate) setTime(selectedDate);
+                            }}
+                        />
+                    </View>
                 }
                 <View style={styles.bottomButtonContainer}>
                     <TouchableOpacity style={{ ...styles.bottomButton }} onPress={() => router.replace({ pathname: from, params: { day: null, time: null}})}>
