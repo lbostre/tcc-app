@@ -36,14 +36,14 @@ export function isOpen(time24: string, day: string, hoursArray: string[]) {
 
     const currentDayRange = hoursArray[dayIndex];
 
-    if (currentDayRange !== "Closed") {
+    if (currentDayRange !== "Closed" && currentDayRange) {
         const [startStr, endStr] = currentDayRange.split(" - ");
         const startTime = parseTime(startStr);
         const endTime = parseTime(endStr);
         if (isWithinRange(startTime, endTime)) return true;
     }
 
-    if (prevDayRange !== "Closed") {
+    if (prevDayRange !== "Closed" && prevDayRange) {
         const [prevStartStr, prevEndStr] = prevDayRange.split(" - ");
         const prevStartTime = parseTime(prevStartStr);
         const prevEndTime = parseTime(prevEndStr);
