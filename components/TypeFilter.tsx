@@ -28,7 +28,7 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
                     }}
                     onPress={() => filter === "" ? setFilter("") : setFilter("")}
                 >
-                    <Text style={{ ...styles.filterText, color: filter === "" ? "white" : "#ff8126" }}>All</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "" ? "black" : "black" }}>All</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
@@ -44,7 +44,7 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
                         size={16}
                         color={filter === "Food Pantry" ? "white" : "#18a773"}
                     />
-                    <Text style={{ ...styles.filterText, color: filter === "Food Pantry" ? "black" : "#18a773" }}>Food Pantry</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "Food Pantry" ? "black" : "black" }}>Food Pantry</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
@@ -56,7 +56,7 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
                     onPress={() => filter === "Shelter" ? setFilter("") : setFilter("Shelter")}
                 >
                     <FontAwesome6 name="house" size={14} color={filter === "Shelter" ? "white" : "#0597ff"} />
-                    <Text style={{ ...styles.filterText, color: filter === "Shelter" ? "black" : "#0597ff" }}>Shelter</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "Shelter" ? "black" : "black" }}>Shelter</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
@@ -68,18 +68,18 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
                     onPress={() => filter === "Medical" ? setFilter("") : setFilter("Medical")}
                 >
                     <FontAwesome5 name="briefcase-medical" size={16} color={filter === "Medical" ? "white" : "#ea4335"} />
-                    <Text style={{ ...styles.filterText, color: filter === "Medical" ? "black" : "#ea4335" }}>Medical</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "Medical" ? "black" : "black" }}>Medical</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
                         ...styles.iconContainer,
                         borderWidth: 3,
-                        backgroundColor: filter === "Other" ? "gray" : "white",
+                        backgroundColor: filter === "Other" ? "lightgray" : "white",
                         borderColor: "darkgray",
                     }}
                     onPress={() => filter === "Other" ? setFilter("") : setFilter("Other")}
                 >
-                    <Text style={{ ...styles.filterText, color: filter === "Other" ? "white" : "gray" }}>Other</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "Other" ? "black" : "black" }}>Other</Text>
                 </TouchableOpacity>
                 {/* <Feather name="arrow-right-circle" size={24} color="black" style={styles.arrowIcon}/> */}
             </ScrollView>
