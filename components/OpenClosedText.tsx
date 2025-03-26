@@ -55,13 +55,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     openText: {
-        color: "green",
+        color: "#006600",
         fontSize: 18,
         lineHeight: 24,
         fontWeight: "600",
     },
     closedText: {
-        color: "red",
+        color: "#ab0b03",
         fontSize: 18,
         lineHeight: 24,
         fontWeight: "600",

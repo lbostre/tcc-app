@@ -15,7 +15,7 @@ export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconP
             <View
                 style={{
                     ...(size === "sm" ? styles.iconContainer : styles.iconContainerLarge),
-                    backgroundColor: "green",
+                    backgroundColor: "#18a773",
                     borderColor: "white",
                     borderWidth: outline ? 2 : 0,
                 }}
@@ -32,7 +32,7 @@ export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconP
             <View
                 style={{
                     ...(size === "sm" ? styles.iconContainer : styles.iconContainerLarge),
-                    backgroundColor: "orange",
+                    backgroundColor: "#0597ff",
                     borderColor: "white",
                     borderWidth: outline ? 2 : 0,
                 }}
@@ -45,7 +45,7 @@ export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconP
             <View
                 style={{
                     ...(size === "sm" ? styles.iconContainer : styles.iconContainerLarge),
-                    backgroundColor: "red",
+                    backgroundColor: "#ea4335",
                     borderColor: "white",
                     borderWidth: outline ? 2 : 0,
                 }}

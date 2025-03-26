@@ -22,64 +22,64 @@ export function TypeFilter({ filter, setFilter }: FilterProps) {
                 <TouchableOpacity
                     style={{
                         ...styles.iconContainer,
-                        backgroundColor: filter === "" ? "white" : "darkblue",
-                        borderWidth: filter === "" ? 3 : 0,
-                        borderColor: "darkblue",
+                        backgroundColor: filter === "" ? "#ffaf75" : "white",
+                        borderWidth: 3,
+                        borderColor: "#ff8126",
                     }}
                     onPress={() => filter === "" ? setFilter("") : setFilter("")}
                 >
-                    <Text style={{ ...styles.filterText, color: filter === "" ? "darkblue" : "white" }}>All</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "" ? "white" : "#ff8126" }}>All</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
                         ...styles.iconContainer,
-                        backgroundColor: filter === "Food Pantry" ? "white" : "green",
-                        borderWidth: filter === "Food Pantry" ? 3 : 0,
-                        borderColor: "darkgreen",
+                        backgroundColor: filter === "Food Pantry" ? "#1fd693" : "white",
+                        borderWidth: 3,
+                        borderColor: "#18a773",
                     }}
                     onPress={() => filter === "Food Pantry" ? setFilter("") : setFilter("Food Pantry")}
                 >
                     <MaterialCommunityIcons
                         name="silverware-fork-knife"
                         size={16}
-                        color={filter === "Food Pantry" ? "green" : "white"}
+                        color={filter === "Food Pantry" ? "white" : "#18a773"}
                     />
-                    <Text style={{ ...styles.filterText, color: filter === "Food Pantry" ? "green" : "white" }}>Food Pantry</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "Food Pantry" ? "black" : "#18a773" }}>Food Pantry</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
                         ...styles.iconContainer,
-                        backgroundColor: filter === "Shelter" ? "white" : "orange",
-                        borderWidth: filter === "Shelter" ? 3 : 0,
-                        borderColor: "darkorange",
+                        backgroundColor: filter === "Shelter" ? "#3daeff" : "white",
+                        borderWidth: 3,
+                        borderColor: "#0597ff",
                     }}
                     onPress={() => filter === "Shelter" ? setFilter("") : setFilter("Shelter")}
                 >
-                    <FontAwesome6 name="house" size={14} color={filter === "Shelter" ? "orange" : "white"} />
-                    <Text style={{ ...styles.filterText, color: filter === "Shelter" ? "orange" : "white" }}>Shelter</Text>
+                    <FontAwesome6 name="house" size={14} color={filter === "Shelter" ? "white" : "#0597ff"} />
+                    <Text style={{ ...styles.filterText, color: filter === "Shelter" ? "black" : "#0597ff" }}>Shelter</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
                         ...styles.iconContainer,
-                        backgroundColor: filter === "Medical" ? "white" : "red",
-                        borderWidth: filter === "Medical" ? 3 : 0,
-                        borderColor: "red",
+                        backgroundColor: filter === "Medical" ? "#ef6e62" : "white",
+                        borderWidth: 3,
+                        borderColor: "#ea4335",
                     }}
                     onPress={() => filter === "Medical" ? setFilter("") : setFilter("Medical")}
                 >
-                    <FontAwesome5 name="briefcase-medical" size={16} color={filter === "Medical" ? "red" : "white"} />
-                    <Text style={{ ...styles.filterText, color: filter === "Medical" ? "red" : "white" }}>Medical</Text>
+                    <FontAwesome5 name="briefcase-medical" size={16} color={filter === "Medical" ? "white" : "#ea4335"} />
+                    <Text style={{ ...styles.filterText, color: filter === "Medical" ? "black" : "#ea4335" }}>Medical</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{
                         ...styles.iconContainer,
-                        borderWidth: filter === "Other" ? 3 : 0,
-                        backgroundColor: filter === "Other" ? "white" : "gray",
+                        borderWidth: 3,
+                        backgroundColor: filter === "Other" ? "gray" : "white",
                         borderColor: "darkgray",
                     }}
                     onPress={() => filter === "Other" ? setFilter("") : setFilter("Other")}
                 >
-                    <Text style={{ ...styles.filterText, color: filter === "Other" ? "gray" : "white" }}>Other</Text>
+                    <Text style={{ ...styles.filterText, color: filter === "Other" ? "white" : "gray" }}>Other</Text>
                 </TouchableOpacity>
                 {/* <Feather name="arrow-right-circle" size={24} color="black" style={styles.arrowIcon}/> */}
             </ScrollView>
