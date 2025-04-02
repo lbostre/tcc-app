@@ -95,8 +95,9 @@ export default function TabTwoScreen() {
                 </ThemedText>
             </View>
             <SearchFilter text={text} setText={setText} setFilter={setFilter} filter={filter} previousPath={"/list"}/>
-            {filterDay && timeString && <View style={styles.belowTypeFilterContainer}> <ThemedText>
-                    Filter: {day} at {timeString}
+            {filterDay !== "" && timeString !== "" && (<View style={styles.belowTypeFilterContainer}> 
+            <ThemedText>
+                {`Filter: ${day} at ${timeString}`}
             </ThemedText>
             <TouchableOpacity
                 style={{
@@ -107,7 +108,7 @@ export default function TabTwoScreen() {
             >
                 <Text style={{ ...styles.filterText }}>Clear Filter</Text>
             </TouchableOpacity>
-            </View>}
+            </View>)}
             <ScrollView style={styles.scrollContainer} contentContainerStyle={{
                 rowGap: 10,
                 paddingBottom: 90
