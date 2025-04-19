@@ -13,20 +13,8 @@ import { ThemedView } from "@/components/ThemedView";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { ResourceIcon } from '@/components/ResourceIcon';
-import { useLayoutEffect } from "react";
-
-type Resource = {
-    id: string;
-    name: string;
-    type: string;
-    address: string;
-    email: string;
-    phone: string;
-    website: string;
-    overview: string;
-    services: string;
-    openTimes: string[];
-};
+import dayjs from "dayjs"
+import { Resource } from '@/utils/types';
 
 export default function ResourceScreen({navigation}: any) {
     const { resource } = useLocalSearchParams();
@@ -46,14 +34,14 @@ export default function ResourceScreen({navigation}: any) {
         openTimes,
     } = parsedResource;
 
-    const days = [
+    const daysOfWeek  = [
+        "Sunday",
         "Monday",
         "Tuesday",
         "Wednesday",
         "Thursday",
         "Friday",
         "Saturday",
-        "Sunday",
     ];
 
     function openDefaultMapsApp(address: string) {
@@ -164,16 +152,19 @@ export default function ResourceScreen({navigation}: any) {
                         <ThemedText type="subtitle">
                             Operating Days/Hours
                         </ThemedText>
-                        {openTimes.map(
-                            (time, index) =>
-                                time !== "Closed" && (
+                        {daysOfWeek.map((day) => {
+                            // @ts-ignore
+                            const timeRanges = openTimes[day];
+                            return (
+                                timeRanges.length > 0 && (
                                     <HoursRow
-                                        day={days[index]}
-                                        hours={time}
-                                        key={time + index}
+                                        key={day}
+                                        day={day}
+                                        hours={timeRanges}
                                     />
                                 )
-                        )}
+                            );
+                        })}
                     </View>
                     <View style={styles.subContainer}>
                         <ThemedText type="subtitle">About</ThemedText>
@@ -207,14 +198,38 @@ function InfoRow({ icon, content, subContent, onPress }: InfoRowProps) {
 
 type HoursRowProps = {
     day: string;
-    hours: string;
+    hours: string[];
 };
 
 function HoursRow({ day, hours }: HoursRowProps) {
+
+    const formatTime = (timeString: string): string => {
+        return dayjs(timeString).format("h:mm A");
+    };
+
+    const timeRanges = [];
+    for (let i = 0; i < hours.length; i += 2) {
+        const open = formatTime(hours[i]);
+        const close = formatTime(hours[i + 1]);
+        timeRanges.push({ open, close });
+    }
+
+    const formattedHours = hours
+        .map((time) => {
+            return dayjs(time).format("h:mm A")
+        })
+        .join(" - ");
+
     return (
         <View style={styles.hoursRowContainer}>
             <Text style={styles.dayText}>{day}</Text>
-            <Text style={styles.hoursText}>{hours}</Text>
+            <View style={styles.timeRangeContainer}>
+                {timeRanges.map((range, index) => (
+                    <Text style={styles.hoursText} key={index}>
+                        {range.open} - {range.close}
+                    </Text>
+                ))}
+            </View>
         </View>
     );
 }
@@ -306,6 +321,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: "center",
         gap: 16,
+    },
+    timeRangeContainer: {
+        display: "flex",
+        flexDirection: "column",
+        marginTop: 4,
     },
     dayText: {
         fontSize: 16,

@@ -9,7 +9,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { ResourceCard } from "@/components/ResourceCard";
 import { useEffect, useState } from "react";
 import { SearchFilter } from '@/components/SearchFilter';
-import { Resource } from '@/utils/types';
+import { Day, Resource } from '@/utils/types';
 import { useLocalSearchParams } from 'expo-router';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import {firestore} from "@/firebaseConfig";
@@ -39,7 +39,7 @@ export default function TabTwoScreen() {
 
     useEffect(() => {
         setLoading(true)
-        const resourcesRef = collection(firestore, "resources");
+        const resourcesRef = collection(firestore, "diffTimeResources");
 
         const q = filter ? query(resourcesRef, where("type", "==", filter)) : resourcesRef;
 
@@ -50,23 +50,16 @@ export default function TabTwoScreen() {
             console.error("Error fetching resources:", error);
             setLoading(false);
         });
-
         // Cleanup subscription on unmount
         setLoading(false)
         return () => unsubscribe();
     }, [filter]);
 
     const filteredResources = resources.filter((resource) => {
-        const date = new Date(filterTime);
-        const formattedTime = date.toLocaleTimeString("en-GB", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-        });
         return (
             resource.name.toLowerCase().includes(text.toLowerCase()) &&
             (resource.type === filter || filter === "") &&
-            (!filterDay || !filterTime || isOpen(formattedTime, filterDay, resource.openTimes))
+            (!filterDay || !filterTime || isOpen(filterTime, filterDay as Day, resource.openTimes))
         );
     });
 

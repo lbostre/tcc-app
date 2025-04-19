@@ -1,27 +1,15 @@
-import { Image, StyleSheet, Platform, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { ThemedText } from "./ThemedText";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Entypo from "@expo/vector-icons/Entypo";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { OpenClosedText } from "./OpenClosedText";
 import { useRouter } from 'expo-router';
 import { ResourceIcon } from '@/components/ResourceIcon';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import React from 'react';
+import { Resource } from '@/utils/types';
 
 type ResourceCardProps = {
-    resource: {
-        id: string;
-        name: string;
-        type: string;
-        address: string;
-        email: string;
-        phone: string;
-        website: string;
-        overview: string;
-        services: string;
-        openTimes: string[];
-    };
+    resource: Resource;
     showMapButton?: boolean;
 };
 

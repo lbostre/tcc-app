@@ -1,34 +1,40 @@
 import { StyleSheet, Text, View } from "react-native";
-import { ThemedText } from "./ThemedText";
+import dayjs from 'dayjs';
+import { Day, OpenTimes } from "@/utils/types";
 
 type OpenClosedTextProps = {
-    hours: string[];
+    hours: OpenTimes;
 };
 
 export function OpenClosedText({ hours }: OpenClosedTextProps) {
-    function getStatus(openTimes: string[]) {
-        const now = new Date();
-        const dayIndex = (now.getDay() + 6) % 7; // Convert Sunday-based index to Monday-based
-        const todayHours = openTimes[dayIndex];
+    function getStatus(openTimes: OpenTimes) {
+        const now = dayjs();  // Use dayjs to get the current date and time
+        const dayIndex = (now.day() + 6) % 7; // Convert Sunday-based index to Monday-based
+        const dayNames: Day[] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const today = dayNames[dayIndex];
+        const todayHours = openTimes[today];
 
-        if (todayHours === "Closed" || !todayHours) return { status: "closedToday" };
-
-        const [openTime, closeTime] = todayHours.split(" - ").map((timeStr) => {
-            const [time, period] = timeStr.split(" ");
-            let [hour, minute] = time.split(":").map(Number);
-            if (period.toLowerCase() === "pm" && hour !== 12) hour += 12;
-            if (period.toLowerCase() === "am" && hour === 12) hour = 0;
-
-            return hour * 60 + minute; // Convert to minutes for easy comparison
-        });
-
-        const nowMinutes = now.getHours() * 60 + now.getMinutes();
-
-        if (nowMinutes >= openTime && nowMinutes <= closeTime) {
-            return { status: "openNow", hours: todayHours };
+        if (!todayHours || todayHours.length === 0 || todayHours[0] === "Closed") {
+            return { status: "closedToday" };
         }
 
-        return { status: "closedNow", hours: todayHours };
+        const nowMinutes = now.hour() * 60 + now.minute(); // current time
+
+        for (let i = 0; i < todayHours.length; i += 2) {
+            const [openTime, closeTime] = [todayHours[i], todayHours[i + 1]];
+
+            const openTimeParsed = dayjs(openTime);
+            const closeTimeParsed = dayjs(closeTime);
+
+            const openTimeInMinutes = openTimeParsed.hour() * 60 + openTimeParsed.minute();
+            const closeTimeInMinutes = closeTimeParsed.hour() * 60 + closeTimeParsed.minute();
+
+            if (nowMinutes >= openTimeInMinutes && nowMinutes <= closeTimeInMinutes) {
+                return { status: "openNow", hours: `${openTimeParsed.format("h:mm A")} - ${closeTimeParsed.format("h:mm A")}` };
+            }
+        }
+
+        return { status: "closedNow", hours: todayHours.join(" - ") };
     }
     const { status, hours: todayHours } = getStatus(hours);
 

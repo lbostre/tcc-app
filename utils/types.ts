@@ -1,3 +1,16 @@
+export type Day =
+    | "Monday"
+    | "Tuesday"
+    | "Wednesday"
+    | "Thursday"
+    | "Friday"
+    | "Saturday"
+    | "Sunday";
+
+export type OpenTimes = {
+    [key in Day]: string[];
+};
+
 export type Resource = {
     id: string;
     name: string;
@@ -8,7 +21,7 @@ export type Resource = {
     website: string;
     overview: string;
     services: string;
-    openTimes: string[];
+    openTimes: OpenTimes;
 };
 
 export type MarkerType = {

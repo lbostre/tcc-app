@@ -1,57 +1,26 @@
-export function isOpen(time24: string, day: string, hoursArray: string[]) {
-    const daysOfWeek = [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-    ];
-    const dayIndex = daysOfWeek.indexOf(day);
-    if (dayIndex === -1) return false;
-    const [hour, minute] = time24.split(":").map(Number);
-    const currentMinutes = hour * 60 + minute; // Convert current time to minutes
+import dayjs from "dayjs";
+import { Day, OpenTimes } from '@/utils/types';
 
-    const prevDayIndex = (dayIndex - 1 + 7) % 7;
-    const prevDayRange = hoursArray[prevDayIndex];
+export function isOpen(time24: string, day: Day, hoursObject: OpenTimes): boolean {
+    const parsedTime = dayjs(time24);
+    const timeInMinutes = parsedTime.hour() * 60 + parsedTime.minute();
 
-    function parseTime(timeStr: string) {
-        const [time, period] = timeStr.split(" ");
-        let [h, m] = time.split(":").map(Number);
-        if (period.toLowerCase() === "pm" && h !== 12) h += 12;
-        if (period.toLowerCase() === "am" && h === 12) h = 0;
-        return h * 60 + (m || 0);
-    }
+    const openTimes = hoursObject[day];
+    if (!openTimes || openTimes.length === 0) return false;
 
-    function isWithinRange(start: number, end: number) {
-        if (start <= end) {
-            return start <= currentMinutes && currentMinutes < end;
-        } else if (prevDayRange !== "Closed") {
-            return currentMinutes >= start || currentMinutes < end;
+    for (let i = 0; i < openTimes.length; i += 2) {
+        const start = dayjs(openTimes[i]);
+        const end = dayjs(openTimes[i + 1]);
+
+        const startMinutes = start.hour() * 60 + start.minute();
+        const endMinutes = end.hour() * 60 + end.minute();
+
+        if (startMinutes <= endMinutes) {
+            // Same-day range
+            if (timeInMinutes >= startMinutes && timeInMinutes < endMinutes) return true;
         } else {
-            return currentMinutes >= start && currentMinutes < end + 24 * 60;
-        }
-    }
-
-    const currentDayRange = hoursArray[dayIndex];
-
-    if (currentDayRange !== "Closed" && currentDayRange) {
-        const [startStr, endStr] = currentDayRange.split(" - ");
-        const startTime = parseTime(startStr);
-        const endTime = parseTime(endStr);
-        if (isWithinRange(startTime, endTime)) return true;
-    }
-
-    if (prevDayRange !== "Closed" && prevDayRange) {
-        const [prevStartStr, prevEndStr] = prevDayRange.split(" - ");
-        const prevStartTime = parseTime(prevStartStr);
-        const prevEndTime = parseTime(prevEndStr);
-
-        if (prevStartTime > prevEndTime) {
-            if (currentMinutes < prevEndTime) {
-                return true;
-            }
+            // Overnight range (e.g., 10pm–2am)
+            if (timeInMinutes >= startMinutes || timeInMinutes < endMinutes) return true;
         }
     }
 

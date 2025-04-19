@@ -35,8 +35,9 @@ export default function HomeScreen() {
     const fetchData = async () => {
         setLoading(true); // Start loading
         try {
-            const resourcesRef = collection(firestore, "resources");
+            const resourcesRef = collection(firestore, "diffTimeResources");
             const resourcesSnapshot = await getDocs(resourcesRef);
+
 
             const fetchedResources: Resource[] = resourcesSnapshot.docs.map(
                 (doc) => ({ id: doc.id, ...doc.data() } as Resource)
