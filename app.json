@@ -26,9 +26,8 @@
                 "googleMaps": {
                     "apiKey": "AIzaSyAtt0TJEqPegDnCo61xq-t-qWfbS7UbDfI"
                 }
-            }
-            // "googleServicesFile": "./google-services.json",
-            // "package": "com.lthc.tccapp"
+            },
+            "googleServicesFile": "./google-services.json"
         },
         "web": {
             "bundler": "metro",
