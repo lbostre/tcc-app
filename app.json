@@ -18,7 +18,7 @@
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./assets/images/adaptive-icon.png",
+                "foregroundImage": "./assets/images/tcc-logo.png",
                 "backgroundColor": "#ffffff"
             },
             "package": "com.lbostre.tccapp",
@@ -26,9 +26,8 @@
                 "googleMaps": {
                     "apiKey": "AIzaSyAtt0TJEqPegDnCo61xq-t-qWfbS7UbDfI"
                 }
-            }
-            // "googleServicesFile": "./google-services.json",
-            // "package": "com.lthc.tccapp"
+            },
+            "googleServicesFile": "./google-services.json"
         },
         "web": {
             "bundler": "metro",
