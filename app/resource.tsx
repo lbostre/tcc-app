@@ -66,7 +66,7 @@ export default function ResourceScreen({navigation}: any) {
     }
 
     function openWebsite(url: string) {
-        Linking.openURL("https://" + url).catch((err) =>
+        Linking.openURL(url).catch((err) =>
             console.error("Failed to open URL:", err)
         );
     }
