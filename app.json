@@ -24,7 +24,7 @@
             "package": "com.lbostre.tccapp",
             "config": {
                 "googleMaps": {
-                    "apiKey": "AIzaSyAtt0TJEqPegDnCo61xq-t-qWfbS7UbDfI"
+                    "apiKey": "AIzaSyAZg61q1ejUnk97tQt6ZJcfkxoTmJ794As"
                 }
             },
             "googleServicesFile": "./google-services.json"
