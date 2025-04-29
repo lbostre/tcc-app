@@ -54,7 +54,7 @@ export default function Filter() {
                             <ThemedText>Select Time</ThemedText>
                             <AntDesign name="clockcircleo" size={20} color="black" />
                         </TouchableOpacity>
-                        <ThemedText>Selected Time: {time.toLocaleTimeString()}</ThemedText>
+                        <ThemedText>Selected Time: {time.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</ThemedText>
                     </>
                 }
                 {Platform.OS === "ios" && 
