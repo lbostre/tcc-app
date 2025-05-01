@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, Animated, Platform } from "react-native";
+import { StyleSheet, View, Animated, Platform, useWindowDimensions, TouchableWithoutFeedback } from "react-native";
 import { Resource, ResourceMarker } from '@/utils/types';
 import { ResourceCard } from '@/components/ResourceCard';
 import * as Location from "expo-location";
@@ -10,7 +10,7 @@ import { ResourceIcon } from '@/components/ResourceIcon';
 type MapProps = {
     resourceMarkers: ResourceMarker[];
     selectedResourceMarker: ResourceMarker | null | undefined;
-    setSelectedResourceMarker: (selectedMarkerResource: ResourceMarker) => void;
+    setSelectedResourceMarker: (selectedMarkerResource: ResourceMarker | null) => void;
     isFocused: boolean;
 }
 
@@ -40,6 +40,7 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
     const onRegionChangeComplete = (newRegion: Region) => {
         setRegion(newRegion); // Keeps track of latitudeDelta and longitudeDelta
     };
+    const { width, height } = useWindowDimensions();
 
     function getInitialState() {
         // Lafayette, IN
@@ -96,8 +97,15 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
         animateToRegion({ latitude: resMarker.marker.latlng.latitude, longitude: resMarker.marker.latlng.longitude, latitudeDelta: .06, longitudeDelta: .06 })
     }
 
+    const handleMapPress = () => {
+        if (selectedResourceMarker) {
+            setSelectedResourceMarker(null);
+        }
+    };
+
     return (
         <View style={styles.container}>
+            
             <MapView
                 ref={mapRef}
                 initialRegion={region}
@@ -105,24 +113,28 @@ export default function Map({resourceMarkers, selectedResourceMarker, setSelecte
                 showsUserLocation={true}
                 onRegionChangeComplete={onRegionChangeComplete} // Track zoom level
                 customMapStyle={mapStyle}
+                userInterfaceStyle="light"
             >
                 {resourceMarkers.map((resMarker, index) => (
                     <Marker
                         key={index}
                         coordinate={resMarker.marker.latlng}
                         onPress={() => handleMarkerOnPress(resMarker)}
-                        style={{padding: Platform.OS === "android" ? 12 : 0}}
+                        style={{paddingTop: Platform.OS === "android" ? 7 : 0, paddingLeft: Platform.OS === "android" ? 6 : 0}}
                     >
-                        <Animated.View style={{ transform: [{ scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? 1.9 : 1 }] }}>
+                        <Animated.View style={{ transform: [{ scale: selectedResourceMarker?.resource.id === resMarker.resource.id ? width <= 360 ? 1.53 : 1.9 : 1 }] }}>
                             <ResourceIcon type={resMarker.resource.type} outline={true} />
                         </Animated.View>
                     </Marker>
                 ))}
             </MapView>
+            
+            {/* </TouchableWithoutFeedback> */}
             <View style={styles.cardContainer}>
                 {selectedResourceMarker && <ResourceCard resource={selectedResourceMarker.resource}/>}
             </View>
         </View>
+       
     );
 }
 

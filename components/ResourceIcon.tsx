@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -10,6 +10,8 @@ type ResourceIconProps = {
 }
 
 export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconProps) {
+    const { width, height } = useWindowDimensions();
+
     if (type === "Food Pantry") {
         return (
             <View
@@ -22,7 +24,7 @@ export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconP
             >
                 <MaterialCommunityIcons
                     name="silverware-fork-knife"
-                    size={size === "sm" ?16: 44}
+                    size={size === "sm" ?width <=360 ? 11:16: 38}
                     color="white"
                 />
             </View>
@@ -37,7 +39,7 @@ export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconP
                     borderWidth: outline ? 2 : 0,
                 }}
             >
-                <FontAwesome6 name="house" size={size === "sm" ?16: 42} color="white" />
+                <FontAwesome6 name="house" size={size === "sm" ? width <=360 ? 11: 16 : 42} color="white" />
             </View>
         );
     } else if(type === "Medical") {
@@ -50,7 +52,7 @@ export function ResourceIcon({type, size = "sm", outline = false}: ResourceIconP
                     borderWidth: outline ? 2 : 0,
                 }}
             >
-                <FontAwesome5 name="briefcase-medical" size={size === "sm" ? 16: 42} color="white" />
+                <FontAwesome5 name="briefcase-medical" size={size === "sm" ?width <=360 ? 11: 16: 42} color="white" />
             </View>
         )
     }
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
         padding: 4,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 2,
     },
     iconContainerLarge: {
         borderRadius: 100,

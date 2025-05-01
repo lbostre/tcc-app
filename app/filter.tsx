@@ -36,9 +36,11 @@ export default function Filter() {
                         selectedValue={day}
                         onValueChange={(itemValue) => setDay(itemValue)}
                         style={{ width: "100%" }}
+                        itemStyle={{color: "black"}}
+                        
                     >
-                        <Picker.Item label="Select Day" value="select" />
-                        <Picker.Item label="Monday" value="Monday" />
+                        <Picker.Item label="Select Day" value="select" style={{color: "black"}}/>
+                        <Picker.Item label="Monday" value="Monday" style={{color: "black"}}/>
                         <Picker.Item label="Tuesday" value="Tuesday" />
                         <Picker.Item label="Wednesday" value="Wednesday" />
                         <Picker.Item label="Thursday" value="Thursday" />
@@ -67,6 +69,7 @@ export default function Filter() {
                             onChange={(event, selectedDate) => {
                                 if (selectedDate) setTime(selectedDate);
                             }}
+                            themeVariant='light'
                         />
                     </View>
                 }
