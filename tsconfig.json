@@ -1,6 +1,13 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "types": [
+      "react",
+      "react-native",
+      "react-navigation",
+    ],
     "strict": true,
     "paths": {
       "@/*": [
